@@ -1,3 +1,4 @@
 [tools]
 direnv = "latest"
+flux2 = "latest"
 kubectl = "latest"
