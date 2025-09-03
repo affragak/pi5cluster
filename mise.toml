@@ -2,5 +2,5 @@
 direnv = "latest"
 flux2 = "latest"
 k9s = "latest"
-kubectl = "latest"
+kubectl = "1.32.1"
 kubens = "latest"
