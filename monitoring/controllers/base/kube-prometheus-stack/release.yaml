@@ -30,6 +30,9 @@ spec:
       adminPassword: grafana123
       ingress:
         enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+
         ingressClassName: traefik
         hosts:
           - grafana.uclab8.net
@@ -40,7 +43,7 @@ spec:
         ## TLS configuration for grafana Ingress
         ## Secret must be manually created in the namespace
         ##
-        tls: []
-        # - secretName: grafana-general-tls
-        #   hosts:
-        #   - grafana.example.com
+        tls:
+          - secretName: grafana-tls-staging
+            hosts:
+              - grafana.uclab8.net
