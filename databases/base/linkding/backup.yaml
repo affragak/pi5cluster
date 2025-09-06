@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Backup
+metadata:
+  name: backup-linkding-db-cnpg-v0
+spec:
+  method: plugin
+  cluster:
+    name: linkding-db-production-cnpg-v0
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io

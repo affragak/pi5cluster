@@ -6,3 +6,4 @@ resources:
   - linkding-db-creds.yaml
   - minio-s3-secret.yaml
   - minio-s3-objectstore.yaml
+  - scheduled-backup.yaml
