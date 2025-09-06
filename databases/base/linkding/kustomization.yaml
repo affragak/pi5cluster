@@ -4,3 +4,5 @@ resources:
   - namespace.yaml
   - database.yaml
   - linkding-db-creds.yaml
+  - minio-s3-secret.yaml
+  - minio-s3-objectstore.yaml
