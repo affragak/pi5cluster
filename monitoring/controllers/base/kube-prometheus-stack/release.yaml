@@ -26,8 +26,25 @@ spec:
         target:
           kind: PrometheusRule
   values:
+    prometheus:
+      prometheusSpec:
+        podMonitorNamespaceSelector:
+          matchLabels:
+            app.kubernetes.io/component: monitoring
+
+        # Discover all PodMonitors, Probes, PrometheusRules and ServiceMonitors
+        podMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
     grafana:
       adminPassword: grafana123
+      persistence:
+        enabled: true
+        type: pvc
+        accessModes:
+          - ReadWriteOnce
+        size: 4Gi
       ingress:
         enabled: true
         annotations:
