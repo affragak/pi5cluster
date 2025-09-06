@@ -11,7 +11,7 @@ spec:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
       parameters:
-        barmanObjectName: minio-s3
+        barmanObjectName: minio-store
   monitoring:
     enablePodMonitor: true
   inheritedMetadata:
