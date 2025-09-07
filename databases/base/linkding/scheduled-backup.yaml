@@ -4,7 +4,7 @@ metadata:
   name: linkding-db-production
 spec:
   immediate: true
-  schedule: "0 0 * * *"
+  schedule: "0 2 * * *"
   backupOwnerReference: cluster
   cluster:
     name: linkding-db-production-cnpg-v0
