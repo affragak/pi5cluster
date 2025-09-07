@@ -9,7 +9,7 @@ spec:
   instances: 2
   plugins:
     - name: barman-cloud.cloudnative-pg.io
-      # isWALArchiver: true
+      isWALArchiver: true
       parameters:
         barmanObjectName: minio-store
   monitoring:
@@ -25,22 +25,22 @@ spec:
       owner: ladmin
       secret:
         name: linkding-db-creds
-  backup:
-    barmanObjectStore:
-      destinationPath: "s3://backups/"
-      endpointURL: "http://atlas.uclab8.net:9000"
-      s3Credentials:
-        accessKeyId:
-          name: minio-s3
-          key: ACCESS_KEY_ID
-        secretAccessKey:
-          name: minio-s3
-          key: ACCESS_SECRET_KEY
-      wal:
-        compression: gzip
-      data:
-        compression: gzip
-    retentionPolicy: 7d
+  # backup:
+  #   barmanObjectStore:
+  #     destinationPath: "s3://backups/"
+  #     endpointURL: "http://atlas.uclab8.net:9000"
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: minio-s3
+  #         key: ACCESS_KEY_ID
+  #       secretAccessKey:
+  #         name: minio-s3
+  #         key: ACCESS_SECRET_KEY
+  #     wal:
+  #       compression: gzip
+  #     data:
+  #       compression: gzip
+  #   retentionPolicy: 7d
   resources:
     requests:
       memory: 320Mi
