@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  name: docs-ingress
+spec:
+  rules:
+    - host: docs.uclab8.net
+      http:
+        paths:
+          - backend:
+              service:
+                name: docs
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - docs.uclab8.net
+      secretName: docs-tls-staging
