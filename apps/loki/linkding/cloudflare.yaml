@@ -33,6 +33,9 @@ spec:
             failureThreshold: 1
             initialDelaySeconds: 10
             periodSeconds: 10
+          ports:
+            - containerPort: 2000
+              name: http-metrics
           volumeMounts:
             - name: config
               mountPath: /etc/cloudflared/config
