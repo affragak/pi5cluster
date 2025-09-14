@@ -36,7 +36,7 @@ spec:
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
     grafana:
-      defaultDashboardsEnabled: false
+      # defaultDashboardsEnabled: false
       adminPassword: grafana123
       persistence:
         enabled: true
