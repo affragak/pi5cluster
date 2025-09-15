@@ -6,7 +6,7 @@ metadata:
 spec:
   description: Postgres cluster for the linkding application
   imageName: quay.io/enterprisedb/postgresql:16.1
-  instances: 2
+  instances: 3
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
