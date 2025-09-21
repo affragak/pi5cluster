@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - cilium
   - cert-manager
-  # - external-dns
+  - external-dns
