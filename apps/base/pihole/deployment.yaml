@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pihole
+    app.kubernetes.io/instance: pihole
+  name: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+    spec:
+      containers:
+        - image: visibilityspots/cloudflared:v2025.6.1
+          imagePullPolicy: IfNotPresent
+          name: cloudflared
+          ports:
+            - containerPort: 53
+              name: dns
+              protocol: TCP
+            - containerPort: 67
+              name: dns-udp
+              protocol: UDP
+          env:
+            - name: TUNNEL_METRICS
+              value: 127.0.0.1:3000
+        - env:
+            - name: TZ
+              value: "Europe/Berlin"
+            - name: FTLCONF_REPLY_ADDR4
+              value: pihole
+            - name: PIHOLE_DNS_
+              value: 127.0.0.1#5054
+          image: pihole/pihole:2025.06.2
+          imagePullPolicy: IfNotPresent
+          name: pihole
+          ports:
+            - containerPort: 80
+              name: pihole-http
+              protocol: TCP
+            - containerPort: 53
+              name: dns
+              protocol: TCP
+            - containerPort: 53
+              name: dns-udp
+              protocol: UDP
+            - containerPort: 443
+              name: pihole-ssl
+              protocol: TCP
+            - containerPort: 67
+              name: client-udp
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /etc/pihole
+              name: pihole
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+      restartPolicy: Always
+
+      volumes:
+        - name: pihole
+          persistentVolumeClaim:
+            claimName: pihole-data-pvc

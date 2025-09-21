@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pihole
+  name: pihole
+spec:
+  ports:
+    - name: dns-udp
+      port: 53
+      protocol: UDP
+      targetPort: 53
+    - name: client-udp
+      port: 67
+      protocol: UDP
+      targetPort: 67
+    - name: pihole-http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: pihole-https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+    - name: dns
+      port: 53
+      protocol: TCP
+      targetPort: 53
+  selector:
+    app: pihole
+  externalTrafficPolicy: Local
+  loadBalancerIP: 10.10.10.14 # this is your DNS IP, NOT THE GUI!
+  type: LoadBalancer
