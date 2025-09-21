@@ -1,0 +1,26 @@
+kubeProxyReplacement: true
+
+ipam:
+  operator:
+    clusterPoolIPv4PodCIDRList: ["10.42.0.0/16"]
+
+l2announcements:
+  enabled: true
+
+externalIPs:
+  enabled: true
+
+k8sClientRateLimit:
+  qps: 50
+  burst: 200
+
+operator:
+  rollOutPods: true
+  replicas: 1
+
+rollOutCiliumPods: true
+
+ingressController:
+  enabled: true
+  default: true
+  loadbalancerMode: shared
