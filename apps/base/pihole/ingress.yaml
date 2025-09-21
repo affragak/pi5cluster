@@ -3,15 +3,17 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-staging
+    kubernetes.io/ingress.class: traefik
   name: pihole
 spec:
+  ingressClassName: traefik
   rules:
     - host: pihole.uclab8.net
       http:
         paths:
           - backend:
               service:
-                name: docs
+                name: pihole
                 port:
                   number: 80
             path: /
