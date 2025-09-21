@@ -1,8 +1,7 @@
-provider:
-  name: pihole
-
+provider: pihole
 policy: sync
-
+pihole-api-version: 6
+txtOwnerId: "homelab"
 pihole:
   server: http://pihole.pihole.svc.cluster.local
 extraEnvVars:
