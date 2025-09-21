@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
   name: pihole
 spec:
-  ingressClassName: traefik
+  ingressClassName: cilium
   rules:
     - host: pihole.uclab8.net
       http:
