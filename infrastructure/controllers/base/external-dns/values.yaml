@@ -1,6 +1,8 @@
+provider:
+  name: pihole
+policy: sync
+
 extraArgs:
-  - --provider=pihole
-  - --policy=sync
   - --pihole-server=http://pihole.pihole.svc.cluster.local
   - --pihole-api-version=6
 
