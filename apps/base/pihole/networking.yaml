@@ -10,10 +10,12 @@ spec:
       port: 53
       protocol: UDP
       targetPort: 53
+      nodePort: 30053
     - name: client-udp
       port: 67
       protocol: UDP
       targetPort: 67
+      nodePort: 30067
     - name: pihole-http
       port: 80
       protocol: TCP
@@ -26,6 +28,7 @@ spec:
       port: 53
       protocol: TCP
       targetPort: 53
+      nodePort: 30054
   selector:
     app: pihole
   # externalTrafficPolicy: Local
