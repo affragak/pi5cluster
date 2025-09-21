@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging
+    cert-manager.io/cluster-issuer: letsencrypt-production
   name: pihole
 spec:
   ingressClassName: cilium
@@ -20,4 +20,4 @@ spec:
   tls:
     - hosts:
         - pihole.uclab8.net
-      secretName: pihole-tls-staging
+      secretName: pihole-tls-production
