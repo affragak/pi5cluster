@@ -29,5 +29,5 @@ spec:
   selector:
     app: pihole
   # externalTrafficPolicy: Local
-  # loadBalancerIP: 10.10.10.14 # this is your DNS IP, NOT THE GUI!
-  type: ClusterIP
+  loadBalancerIP: 10.10.10.244 # this is your DNS IP, NOT THE GUI!
+  type: LoadBalancer
