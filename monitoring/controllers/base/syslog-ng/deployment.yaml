@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syslog-ng
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syslog-ng
+  template:
+    metadata:
+      labels:
+        app: syslog-ng
+    spec:
+      containers:
+        - name: syslog-ng
+          image: balabit/syslog-ng:4.8.0
+          ports:
+            - containerPort: 601
+              protocol: TCP
+            - containerPort: 514
+              protocol: UDP
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/syslog-ng/syslog-ng.conf
+              subPath: syslog-ng.conf
+            - name: syslog-ng-logs
+              mountPath: /var/log # Syslog-NG will write logs here
+      volumes:
+        - name: config-volume
+          configMap:
+            name: syslog-ng-config
+        - name: syslog-ng-logs
+          persistentVolumeClaim:
+            claimName: syslog-ng-logs-pvc
