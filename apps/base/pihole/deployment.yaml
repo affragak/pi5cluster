@@ -36,7 +36,7 @@ spec:
               value: pihole
             - name: PIHOLE_DNS_
               value: 127.0.0.1#5054
-          image: pihole/pihole:2025.06.2
+          image: pihole/pihole:2025.08.0
           imagePullPolicy: IfNotPresent
           name: pihole
           ports:
