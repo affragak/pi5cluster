@@ -29,8 +29,26 @@ spec:
         podMonitorNamespaceSelector:
           matchLabels:
             app.kubernetes.io/component: monitoring
-
-        # Discover all PodMonitors, Probes, PrometheusRules and ServiceMonitors
+        additionalScrapeConfigs:
+          - job_name: "kubernetes-endpoints"
+            scrape_interval: 30s
+            kubernetes_sd_configs:
+              - role: endpoints
+            relabel_configs:
+              - source_labels:
+                  [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+                action: keep
+                regex: true
+              - source_labels:
+                  [
+                    __address__,
+                    __meta_kubernetes_service_annotation_prometheus_io_port,
+                  ]
+                action: replace
+                target_label: __address__
+                regex: (.+)(?::\d+);(\d+)
+                replacement: $1:$2
+            # Discover all PodMonitors, Probes, PrometheusRules and ServiceMonitors
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
