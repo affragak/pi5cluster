@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: pihole
 resources:
   - ../../base/pihole/
+  - pihole-container-env-secret.yaml
