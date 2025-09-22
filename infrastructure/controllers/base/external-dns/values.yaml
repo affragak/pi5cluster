@@ -7,7 +7,7 @@ envFrom:
     name: pihole-password
 
 extraArgs:
-  - --pihole-server=http://pihole.pihole.svc.cluster.local
+  - --pihole-server=http://pihole.pihole.svc.cluster.local/api
   - --pihole-api-version=6
 
 # extraEnvVars:
