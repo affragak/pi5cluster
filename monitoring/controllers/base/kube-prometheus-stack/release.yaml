@@ -48,6 +48,9 @@ spec:
                 target_label: __address__
                 regex: (.+)(?::\d+);(\d+)
                 replacement: $1:$2
+          - job_name: "mktxp"
+            static_configs:
+              - targets: ["mktxp_machine_IP:49090"]
             # Discover all PodMonitors, Probes, PrometheusRules and ServiceMonitors
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
