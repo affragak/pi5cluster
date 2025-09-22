@@ -14,9 +14,42 @@ k8sClientRateLimit:
   qps: 50
   burst: 200
 
+hubble:
+  enabled: true
+  metrics:
+    enabled:
+      - dns
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - httpV2:sourceContext=workload-name|pod-name|reserved-identity;destinationContext=workload-name|pod-name|reserved-identity;labelsContext=source_namespace,destination_namespace,traffic_direction
+    enableOpenMetrics: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9965"
+      labels:
+        app.kubernetes.io/component: monitoring
+
 operator:
   rollOutPods: true
   replicas: 1
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9963"
+      labels:
+        app.kubernetes.io/component: monitoring
 
 rollOutCiliumPods: true
 
@@ -24,3 +57,13 @@ ingressController:
   enabled: true
   default: true
   loadbalancerMode: shared
+
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      app.kubernetes.io/component: monitoring
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9962"
