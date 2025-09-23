@@ -23,6 +23,5 @@ data:
     log {
         source(s_local);
         source(s_network);
-        destination(d_local);
         destination(d_loki);
     };
