@@ -14,11 +14,14 @@ data:
     default-network-drivers(
     );
     };
-    destination d_local {
-        file("/var/log/messages");
+    template t_promtail_rfc5424 {
+        template("<${PRI}>1 ${ISODATE} ${HOST} ${PROGRAM} ${PID} ${MSGID} - ${MSG}\\n");
     };
+
     destination d_loki {
-       syslog("promtail-syslog.monitoring.svc.cluster.local" transport("tcp") port(1514)); 
+       syslog("promtail-syslog.monitoring.svc.cluster.local" transport("tcp") port(1514)
+       template(t_promtail_rfc5424)
+       );
     };
     log {
         source(s_local);
