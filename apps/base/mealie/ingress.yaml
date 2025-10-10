@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app.kubernetes.io/instance: mealie
+    app.kubernetes.io/name: mealie
+  name: mealie-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: mealie.uclab8.net
+      http:
+        paths:
+          - backend:
+              service:
+                name: mealie
+                port:
+                  number: 9000
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - mealie.uclab8.net
+      secretName: mealie-staging-tls
