@@ -27,7 +27,11 @@ spec:
           volumeMounts:
             - name: mealie-data
               mountPath: /app/data
+            - name: nltk-data
+              mountPath: /nltk_data
       volumes:
         - name: mealie-data
           persistentVolumeClaim:
           claimName: mealie-data-pvc
+        - name: nltk-data
+          emtpyDir: {}
