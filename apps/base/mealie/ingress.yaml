@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: mealie
   name: mealie-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
   ingressClassName: cilium
   rules:
@@ -23,4 +23,4 @@ spec:
   tls:
     - hosts:
         - mealie.uclab8.net
-      secretName: mealie-staging-tls
+      secretName: mealie-prod-tls
