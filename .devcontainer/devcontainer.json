@@ -3,7 +3,6 @@
     "context": "..",
     "dockerfile": "Dockerfile"
   },
-  "remoteUser": "ubuntu",
   "remoteEnv": {
     "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
   },
