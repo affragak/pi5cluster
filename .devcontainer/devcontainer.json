@@ -4,7 +4,7 @@
     "dockerfile": "Dockerfile"
   },
   "remoteEnv": {
-    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+    "MISE_GITHUB_TOKEN": "${localEnv:MISE_GITHUB_TOKEN}",
     "KUBECONFIG": "/home/vscode/.kube/config"
   },
   "mounts": [
