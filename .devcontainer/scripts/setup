@@ -1,3 +1,2 @@
 #!/bin/bash
-
-/usr/local/bin/mise trust /workspaces/pi5cluster/mise.toml && /usr/local/bin/mise install
+/usr/local/bin/mise trust /workspaces/"$DEVPOD_WORKSPACE_ID"/mise.toml && /usr/local/bin/mise install
