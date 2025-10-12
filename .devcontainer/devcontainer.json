@@ -4,7 +4,7 @@
     "dockerfile": "Dockerfile"
   },
   "postCreateCommand": ".devcontainer/scripts/setup",
-  "forwardPorts": [8000],
+  "forwardPorts": [8001],
   "remoteEnv": {
     "MISE_GITHUB_TOKEN": "${localEnv:MISE_GITHUB_TOKEN}"
   }
