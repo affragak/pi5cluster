@@ -4,16 +4,7 @@
     "dockerfile": "Dockerfile"
   },
   "remoteEnv": {
-    "MISE_GITHUB_TOKEN": "${localEnv:MISE_GITHUB_TOKEN}",
-    "KUBECONFIG": "/home/vscode/.kube/config"
+    "MISE_GITHUB_TOKEN": "${localEnv:MISE_GITHUB_TOKEN}"
   },
-  "mounts": [
-    "source=${localWorkspaceFolder}/kubeconfig,target=/home/vscode/.kube/config,type=bind,readonly",
-
-    "source=${localWorkspaceFolder}/age.agekey,target=/home/vscode/.config/sops/age/keys.txt,type=bind,readonly",
-
-    "source=${localWorkspaceFolder}/.envrc,target=/workspaces/${localWorkspaceFolderBasename}/.envrc,type=bind,readonly"
-  ],
   "postCreateCommand": ".devcontainer/scripts/setup"
 }
-
