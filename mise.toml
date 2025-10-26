@@ -1,5 +1,7 @@
 [tools]
 age = "latest"
+cilium-cli = "latest"
+cilium-hubble = "latest"
 direnv = "latest"
 flux2 = "latest"
 k9s = "latest"
