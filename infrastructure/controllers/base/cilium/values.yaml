@@ -43,7 +43,7 @@ hubble:
 
 operator:
   rollOutPods: true
-  replicas: 1
+  # replicas: 1
   prometheus:
     enabled: true
     serviceMonitor:

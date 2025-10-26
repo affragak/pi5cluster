@@ -4,5 +4,5 @@ metadata:
   name: ipv4-pool
 spec:
   blocks:
-    - start: "10.10.10.10"
-      stop: "10.10.10.19"
+    - start: "10.10.10.110"
+      stop: "10.10.10.120"
