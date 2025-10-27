@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-sync
+  namespace: blog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: git-sync
+  template:
+    metadata:
+      labels:
+        app: git-sync
+    spec:
+      containers:
+        - name: git-pull
+          image: bitnami/git
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              mkdir -p /root/.ssh
+              cp /etc/git-secret/id_rsa /root/.ssh/
+              echo "" >> /root/.ssh/id_rsa
+              chmod 600 /root/.ssh/id_rsa
+              ssh-keyscan github.com > /root/.ssh/known_hosts
+              cat > /root/.ssh/config << 'EOF'
+              Host github.com
+                  User git
+                  IdentityFile /root/.ssh/id_rsa
+                  Ciphers aes256-ctr,aes192-ctr,aes128-ctr
+              EOF
+              chmod 600 /root/.ssh/config
+              # Initial clone
+              if [ ! -d /www/.git ]; then
+                shopt -s dotglob
+                git clone git@github.com:affragak/blog.git --no-checkout --branch main /tmp/www
+                cd /tmp/www
+                git sparse-checkout init --cone
+                git sparse-checkout set public
+                git checkout
+                mv /tmp/www/* /www/
+                mv /tmp/www/.git /www/
+              fi
+              # Continuous pull
+              while true; do
+                cd /www && git -c safe.directory=/www pull origin main
+                sleep 60
+              done
+          volumeMounts:
+            - mountPath: /www
+              name: www
+            - mountPath: /etc/git-secret
+              name: git-ssh-key
+              readOnly: true
+          resources:
+            requests:
+              ephemeral-storage: 2Gi
+            limits:
+              ephemeral-storage: 4Gi
+      volumes:
+        - name: www
+          persistentVolumeClaim:
+            claimName: blog-content
+        - name: git-ssh-key
+          secret:
+            secretName: git-ssh-key
+            defaultMode: 0400

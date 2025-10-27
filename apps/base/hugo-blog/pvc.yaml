@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: blog-content
+  namespace: blog
+spec:
+  accessModes:
+    - ReadWriteMany # Important: allows multiple pods to read
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: synology-iscsi-storage
