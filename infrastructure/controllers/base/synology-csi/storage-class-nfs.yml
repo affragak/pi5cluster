@@ -12,3 +12,4 @@ mountOptions:
   - nfsvers=4.1
 reclaimPolicy: Delete
 allowVolumeExpansion: true
+
