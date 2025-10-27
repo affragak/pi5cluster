@@ -6,7 +6,7 @@ provisioner: csi.san.synology.com
 parameters:
   protocol: "nfs"
   dsm: "10.10.10.9"
-  location: "/volume1/pi5k3s"
+  location: "/volume1"
   mountPermissions: "0755"
 mountOptions:
   - nfsvers=4.1
