@@ -4,6 +4,10 @@ metadata:
   name: l2-announcement-policy
 spec:
   interfaces:
-    - eth0
+    - ^ens.*$
   externalIPs: true
   loadBalancerIPs: true
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
