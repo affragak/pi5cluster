@@ -4,7 +4,7 @@ metadata:
   name: l2-announcement-policy
 spec:
   interfaces:
-    - ^ens.*$
+    - ^eno.*$
   externalIPs: true
   loadBalancerIPs: true
   nodeSelector:
