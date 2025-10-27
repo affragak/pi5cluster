@@ -3,3 +3,5 @@ kind: Kustomization
 namespace: blog
 resources:
   - ../../base/hugo-blog/
+  - gateway.yaml
+  - http-route.yaml
