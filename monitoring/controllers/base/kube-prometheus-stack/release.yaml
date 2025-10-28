@@ -65,22 +65,23 @@ spec:
         accessModes:
           - ReadWriteOnce
         size: 4Gi
-      ingress:
-        enabled: true
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
+        storageClassName: synology-iscsi-storage
+      # ingress:
+      #   enabled: true
+      #   annotations:
+      #     cert-manager.io/cluster-issuer: letsencrypt-production
+      #
+      #   ingressClassName: cilium
+      #   hosts:
+      #     - grafana.uclab8.net
 
-        ingressClassName: cilium
-        hosts:
-          - grafana.uclab8.net
+      ## Path for grafana ingress
+      # path: /
 
-        ## Path for grafana ingress
-        path: /
-
-        ## TLS configuration for grafana Ingress
-        ## Secret must be manually created in the namespace
-        ##
-        tls:
-          - secretName: grafana-tls-production
-            hosts:
-              - grafana.uclab8.net
+      ## TLS configuration for grafana Ingress
+      ## Secret must be manually created in the namespace
+      ##
+      # tls:
+      #   - secretName: grafana-tls-production
+      #     hosts:
+      #       - grafana.uclab8.net
