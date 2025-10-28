@@ -5,6 +5,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: synology-iscsi-storage
   resources:
     requests:
       storage: 1G
