@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - kube-prometheus-stack
   - loki-stack
-  # - mkxtp-exporter
-  # - syslog-ng
+  - mkxtp-exporter
+  - syslog-ng
