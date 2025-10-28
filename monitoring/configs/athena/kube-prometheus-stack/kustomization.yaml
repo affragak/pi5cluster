@@ -4,6 +4,9 @@ namespace: monitoring
 resources:
   - postgres-operator-default-alerts.yaml
   - podmonitor.yaml
+  - certificate.yaml
+  - gateway.yaml
+  - http-route.yaml
 configMapGenerator:
   - name: flux-grafana-dashboards
     files:

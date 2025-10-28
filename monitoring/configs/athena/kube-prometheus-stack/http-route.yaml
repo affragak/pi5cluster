@@ -1,0 +1,21 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: monitoring-grafana
+  namespace: monitoring
+spec:
+  hostnames:
+    - monitoring.uclab8.net # Specify a valid domain to reach your application
+  parentRefs:
+    - name: monitoring-grafana
+  rules:
+    - backendRefs:
+        - name: kube-prometheus-stack-grafana # Specify the service of the application
+          port: 80
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+status:
+  parents: []

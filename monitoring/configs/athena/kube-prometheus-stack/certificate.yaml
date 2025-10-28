@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: monitoring-uclab8-tls
+  namespace: monitoring
+spec:
+  secretName: monitoring-uclab8-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - monitoring.uclab8.net
