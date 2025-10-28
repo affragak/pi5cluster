@@ -5,6 +5,8 @@ metadata:
   namespace: blog
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production # Specify the name of your issuer resource
+  labels:
+    external-dns: enabled
 spec:
   gatewayClassName: cilium
   listeners:
