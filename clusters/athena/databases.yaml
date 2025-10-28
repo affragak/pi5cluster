@@ -12,5 +12,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./databases/zeus
+  path: ./databases/athena
   prune: true
