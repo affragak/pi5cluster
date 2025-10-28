@@ -12,6 +12,7 @@ env:
 extraArgs:
   - --pihole-server=http://pihole.pihole.svc.cluster.local
   - --pihole-api-version=6
+  - --gateway-label-filter=external-dns==enabled
 
 # extraEnvVars:
 #   - name: EXTERNAL_DNS_PIHOLE_PASSWORD
@@ -21,11 +22,7 @@ extraArgs:
 #         key: password
 
 sources:
-  - ingress
-  - service
   - gateway-httproute
-  - gateway-tlsroute
-  - gateway-tcproute
 
 ingressClassFilters:
   - cilium
