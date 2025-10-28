@@ -6,7 +6,7 @@ metadata:
 spec:
   description: Postgres cluster for the linkding application
   imageName: quay.io/enterprisedb/postgresql:16.8
-  instances: 3
+  instances: 2
   primaryUpdateStrategy: unsupervised
   plugins:
     - name: barman-cloud.cloudnative-pg.io
@@ -20,6 +20,7 @@ spec:
       app: linkding-database
   storage:
     size: 1Gi
+    storageClass: synology-iscsi-storage
   bootstrap:
     initdb:
       database: linkding
