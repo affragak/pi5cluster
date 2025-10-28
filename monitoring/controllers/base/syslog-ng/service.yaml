@@ -16,4 +16,4 @@ spec:
       port: 514
       targetPort: 514
   type: LoadBalancer
-  loadBalancerIP: 10.10.10.19
+  loadBalancerIP: 10.10.10.119
