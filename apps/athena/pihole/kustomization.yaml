@@ -6,3 +6,4 @@ resources:
   - pihole-container-env-secret.yaml
   - gateway.yaml
   - http-route.yaml
+  - certificate.yaml
