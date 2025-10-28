@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - hugo-blog
   - pihole
-  # - linkding
+  - linkding
