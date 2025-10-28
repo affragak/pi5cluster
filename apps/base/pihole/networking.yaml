@@ -28,6 +28,6 @@ spec:
       targetPort: 53
   selector:
     app: pihole
-  externalTrafficPolicy: Local
+  # externalTrafficPolicy: Local
   loadBalancerIP: 10.10.10.114 # this is your DNS IP, NOT THE GUI!
   type: LoadBalancer
