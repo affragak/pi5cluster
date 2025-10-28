@@ -4,7 +4,7 @@ resources:
   - cilium
   - eso
   - cert-manager
-  # - external-dns
+  - external-dns
   # - cloudnativepg
   - synology-csi
   # - renovate
