@@ -7,4 +7,4 @@ resources:
   - external-dns
   - cloudnativepg
   - synology-csi
-  # - renovate
+  - renovate
