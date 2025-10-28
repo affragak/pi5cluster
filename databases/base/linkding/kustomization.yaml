@@ -6,4 +6,4 @@ resources:
   - minio-secret.yaml
   - minio-s3-objectstore.yaml
   - database.yaml
-  # - scheduled-backup.yaml
+  - scheduled-backup.yaml
