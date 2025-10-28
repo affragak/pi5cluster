@@ -4,6 +4,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: blog-uclab8
     app.kubernetes.io/name: nginx
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: blog.uclab8.net
   name: blog-server
   namespace: blog
 spec:
