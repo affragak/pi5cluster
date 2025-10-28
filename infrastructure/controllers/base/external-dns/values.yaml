@@ -22,6 +22,7 @@ extraArgs:
 
 sources:
   - ingress
+  - service
 
 ingressClassFilters:
   - cilium
