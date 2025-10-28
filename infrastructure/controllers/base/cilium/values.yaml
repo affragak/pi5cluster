@@ -33,26 +33,26 @@ hubble:
     enabled: true
   ui:
     enabled: true
-    # serviceMonitor:
-    #   enabled: true
-    #   annotations:
-    #     prometheus.io/scrape: "true"
-    #     prometheus.io/port: "9965"
-    #   labels:
-    #     app.kubernetes.io/component: monitoring
+    serviceMonitor:
+      enabled: true
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9965"
+      labels:
+        app.kubernetes.io/component: monitoring
 
 operator:
   rollOutPods: true
   # replicas: 1
-  # prometheus:
-  #   enabled: true
-  #   serviceMonitor:
-  #     enabled: true
-  #   annotations:
-  #     prometheus.io/scrape: "true"
-  #     prometheus.io/port: "9963"
-  #     labels:
-  #       app.kubernetes.io/component: monitoring
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9963"
+      labels:
+        app.kubernetes.io/component: monitoring
 
 rollOutCiliumPods: true
 
@@ -65,12 +65,12 @@ gatewayAPI:
 #   default: true
 #   loadbalancerMode: shared
 
-# prometheus:
-#   enabled: true
-#   serviceMonitor:
-#     enabled: true
-#     labels:
-#       app.kubernetes.io/component: monitoring
-#     annotations:
-#       prometheus.io/scrape: "true"
-#       prometheus.io/port: "9962"
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      app.kubernetes.io/component: monitoring
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9962"
