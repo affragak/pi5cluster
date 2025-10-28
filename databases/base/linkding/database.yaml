@@ -24,7 +24,7 @@ spec:
   bootstrap:
     initdb:
       database: linkding
-      owner: ladmin
+      owner: affragak
       secret:
         name: linkding-db-creds
   resources:
