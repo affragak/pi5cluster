@@ -1,6 +1,7 @@
 # K3s GitOps HomeLab
 
-An educational showcase repository featuring a complete GitOps setup running on a single-node Raspberry Pi 5 with K3s Kubernetes distribution.
+~~An educational showcase repository featuring a complete GitOps setup running on a single-node Raspberry Pi 5 with K3s Kubernetes distribution.~~
+An educational showcase repository featuring a complete GitOps setup running on a K3s Kubernetes cluster with a Raspberry Pi 5 control plane and two Intel NUC8i7 worker nodes.
 
 ## 🏗️ Architecture
 
