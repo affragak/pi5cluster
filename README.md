@@ -1,17 +1,16 @@
 # K3s GitOps HomeLab
 
-~~An educational showcase repository featuring a complete GitOps setup running on a single-node Raspberry Pi 5 with K3s Kubernetes distribution.~~
 An educational showcase repository featuring a complete GitOps setup running on a K3s Kubernetes cluster with a Raspberry Pi 5 control plane and two Intel NUC8i7 worker nodes.
 
 ## 🏗️ Architecture
 
 This project demonstrates a modern Kubernetes deployment pipeline featuring:
-
-- **K3s**: Lightweight Kubernetes distribution running on Raspberry Pi 5
+- **K3s**: Lightweight Kubernetes distribution running on mixed ARM/x86 architecture
+- **Cilium**: eBPF-based CNI for advanced networking and observability
 - **GitOps**: Infrastructure and application management through Git
 - **Flux**: GitOps operator for continuous delivery
 - ~~**SOPS/AGE**: Secrets encryption and management~~
-- **External Secrets Operator: Secrets management with HashiCorp Vault integration**
+- **External Secrets Operator**: Secrets management with HashiCorp Vault integration
 - **CloudNative PostgreSQL**: Database operator for PostgreSQL workloads
 - **Monitoring**: Grafana and kube-prometheus-stack for observability
 - **TLS Management**: Cert-manager with Let's Encrypt certificates
@@ -21,7 +20,8 @@ This project demonstrates a modern Kubernetes deployment pipeline featuring:
 
 ## 🚀 Features
 
-- **Single-node setup**: Complete Kubernetes cluster on Raspberry Pi 5
+- **Multi-node hybrid cluster**: Raspberry Pi 5 control plane with Intel NUC worker nodes
+- **Advanced networking**: Cilium CNI with eBPF for high-performance networking
 - **GitOps workflow**: All configurations managed through Git
 - **Encrypted secrets**: External Secrets Operator with HashiCorp Vault for secure secret management
 - **Database management**: PostgreSQL clusters via CloudNative-PG operator
@@ -33,7 +33,8 @@ This project demonstrates a modern Kubernetes deployment pipeline featuring:
 
 ## 🛠️ Tech Stack
 
-- **Kubernetes**: K3s
+- **Kubernetes**: K3s v1.33.4
+- **CNI**: Cilium (eBPF-based)
 - **GitOps**: Flux v2
 - **Secrets**: External Secrets Operator + HashiCorp Vault
 - **Database**: CloudNative PostgreSQL Operator
@@ -42,14 +43,14 @@ This project demonstrates a modern Kubernetes deployment pipeline featuring:
 - **Networking**: Cloudflare Tunnels
 - **Updates**: Renovate bot
 - **Development**: Dev Container
-- **Hardware**: Raspberry Pi 5
-
+- **Hardware**: Raspberry Pi 5 (ARM) + Intel NUC8i7 (x86)
 
 ## 🎯 Purpose
 
 This repository serves as a comprehensive example for:
 - Learning GitOps principles and practices
-- Understanding Kubernetes operations on edge hardware
+- Understanding Kubernetes operations on hybrid edge hardware
+- Implementing eBPF-based networking with Cilium
 - Implementing secure secret management workflows
 - Exploring cloud-native database operations
 - Setting up complete monitoring and observability stack
@@ -60,7 +61,7 @@ This repository serves as a comprehensive example for:
 
 ## 🔐 Security
 
-All sensitive data are securely stored in HashiCorp Vault and dynamically synchronized to the cluster via External Secrets Operator, ensuring robust security while maintaining GitOps best practices. Additionally, Cloudflare Tunnels provide secure internet exposure without opening firewall ports or exposing the home network, creating an encrypted connection between the Pi and Cloudflare's edge network.
+Sensitive data is securely stored in HashiCorp Vault and dynamically synchronized to the cluster via External Secrets Operator, ensuring robust security while maintaining GitOps best practices. Additionally, Cloudflare Tunnels provide secure internet exposure without opening firewall ports or exposing the home network, creating an encrypted connection between the cluster and Cloudflare's edge network.
 
 ---
 
