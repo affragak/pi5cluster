@@ -3,3 +3,5 @@ kind: Kustomization
 namespace: uclab
 resources:
   - ../../base/uclabdotdev/
+  - cloudflare-secret.yaml
+  - cloudflare.yaml
