@@ -9,7 +9,8 @@ This project demonstrates a modern Kubernetes deployment pipeline featuring:
 - **K3s**: Lightweight Kubernetes distribution running on Raspberry Pi 5
 - **GitOps**: Infrastructure and application management through Git
 - **Flux**: GitOps operator for continuous delivery
-- **SOPS/AGE**: Secrets encryption and management
+- ~~**SOPS/AGE**: Secrets encryption and management~~
+- **External Secrets Operator: Secrets management with HashiCorp Vault integration**
 - **CloudNative PostgreSQL**: Database operator for PostgreSQL workloads
 - **Monitoring**: Grafana and kube-prometheus-stack for observability
 - **TLS Management**: Cert-manager with Let's Encrypt certificates
@@ -21,7 +22,7 @@ This project demonstrates a modern Kubernetes deployment pipeline featuring:
 
 - **Single-node setup**: Complete Kubernetes cluster on Raspberry Pi 5
 - **GitOps workflow**: All configurations managed through Git
-- **Encrypted secrets**: SOPS with AGE encryption for secure secret management
+- **Encrypted secrets**: External Secrets Operator with HashiCorp Vault for secure secret management
 - **Database management**: PostgreSQL clusters via CloudNative-PG operator
 - **Complete observability**: Grafana dashboards with Prometheus metrics
 - **Automated TLS**: Let's Encrypt certificates via cert-manager
@@ -33,7 +34,7 @@ This project demonstrates a modern Kubernetes deployment pipeline featuring:
 
 - **Kubernetes**: K3s
 - **GitOps**: Flux v2
-- **Secrets**: SOPS + AGE encryption
+- **Secrets**: External Secrets Operator + HashiCorp Vault
 - **Database**: CloudNative PostgreSQL Operator
 - **Monitoring**: Grafana + Prometheus (kube-prometheus-stack)
 - **TLS**: cert-manager + Let's Encrypt
@@ -58,7 +59,7 @@ This repository serves as a comprehensive example for:
 
 ## 🔐 Security
 
-All sensitive data is encrypted using SOPS with AGE keys before being committed to the repository, ensuring secrets remain secure while maintaining the GitOps workflow. Additionally, Cloudflare Tunnels provide secure internet exposure without opening firewall ports or exposing the home network, creating an encrypted connection between the Pi and Cloudflare's edge network.
+All sensitive are securely stored in HashiCorp Vault and dynamically synchronized to the cluster via External Secrets Operator, ensuring robust security while maintaining GitOps best practices. Additionally, Cloudflare Tunnels provide secure internet exposure without opening firewall ports or exposing the home network, creating an encrypted connection between the Pi and Cloudflare's edge network.
 
 ---
 
