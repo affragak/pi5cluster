@@ -59,7 +59,7 @@ This repository serves as a comprehensive example for:
 
 ## 🔐 Security
 
-All sensitive are securely stored in HashiCorp Vault and dynamically synchronized to the cluster via External Secrets Operator, ensuring robust security while maintaining GitOps best practices. Additionally, Cloudflare Tunnels provide secure internet exposure without opening firewall ports or exposing the home network, creating an encrypted connection between the Pi and Cloudflare's edge network.
+All sensitive data are securely stored in HashiCorp Vault and dynamically synchronized to the cluster via External Secrets Operator, ensuring robust security while maintaining GitOps best practices. Additionally, Cloudflare Tunnels provide secure internet exposure without opening firewall ports or exposing the home network, creating an encrypted connection between the Pi and Cloudflare's edge network.
 
 ---
 
