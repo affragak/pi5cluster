@@ -59,7 +59,7 @@ spec:
     grafana:
       # defaultDashboardsEnabled: false
       plugins:
-        - cloudflare-app
+        - yesoreyeram-infinity-datasource
       adminPassword: grafana123
       persistence:
         enabled: true
