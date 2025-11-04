@@ -58,6 +58,8 @@ spec:
         serviceMonitorSelectorNilUsesHelmValues: false
     grafana:
       # defaultDashboardsEnabled: false
+      plugins:
+        - cloudflare-app
       adminPassword: grafana123
       persistence:
         enabled: true
