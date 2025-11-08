@@ -16,7 +16,7 @@ spec:
         app: pihole
     spec:
       containers:
-        - image: visibilityspots/cloudflared:v2025.9.0
+        - image: visibilityspots/cloudflared:v2025.11.1
           imagePullPolicy: IfNotPresent
           name: cloudflared
           ports:
