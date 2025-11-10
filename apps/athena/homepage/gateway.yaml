@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: homepage
+  namespace: homepage
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production # Specify the name of your issuer resource
+  labels:
+    external-dns: enabled
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - hostname: homepage.uclab8.net # Specify a valid domain to reach your application
+      name: homepage-uclab8-net-https
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: homepage-uclab8-tls # Specify the secret name to be used with your application
+      allowedRoutes:
+        namespaces:
+          from: All
