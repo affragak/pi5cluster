@@ -20,4 +20,7 @@ spec:
                     name: renovate-container-env
                 - configMapRef:
                     name: renovate-configmap
+              env:
+                - name: LOG_LEVEL
+                  value: debug
           restartPolicy: Never
