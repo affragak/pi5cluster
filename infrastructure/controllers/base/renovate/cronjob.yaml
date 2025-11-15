@@ -4,7 +4,7 @@ metadata:
   name: renovate
   namespace: renovate
 spec:
-  schedule: "@weekly"
+  schedule: "@hourly"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -20,7 +20,7 @@ spec:
                     name: renovate-container-env
                 - configMapRef:
                     name: renovate-configmap
-              env:
-                - name: LOG_LEVEL
-                  value: debug
+              # env:
+              #   - name: LOG_LEVEL
+              #     value: debug
           restartPolicy: Never
