@@ -17,7 +17,7 @@ spec:
       # No imagePullSecrets needed for public registry
       containers:
         - name: mkdocs
-          image: gitlab.uclab8.net:5050/affragak/mkdocs:v1.0.27
+          image: gitlab.uclab8.net:5050/affragak/mkdocs:v1.0.31
           imagePullPolicy: Always
           ports:
             - containerPort: 80
