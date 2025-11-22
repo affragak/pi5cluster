@@ -518,7 +518,7 @@ aliases:
 ##      communications:
 ##        # Here specify settings for each app, like Slack, Mattermost etc.
 ##        # NOTE: Use setting format visible below.
-existingCommunicationsSecretName: ""
+existingCommunicationsSecretName: "botkube-slack-secrets"
 
 # -- Map of communication groups. Communication group contains settings for multiple communication platforms.
 # The property name under `communications` object is an alias for a given configuration group. You can define multiple communication groups with different names.
@@ -548,20 +548,9 @@ communications:
               - k8s-recommendation-events
       # -- Bot token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
-extraEnv:
-  - name: BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_APP__TOKEN
-    valueFrom:
-      secretKeyRef:
-        name: botkube-slack-secrets
-        key: appToken
-  - name: BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_BOT__TOKEN
-    valueFrom:
-      secretKeyRef:
-        name: botkube-slack-secrets
-        key: botToken
 
-#      botToken: ''
-#      appToken: ''
+      botToken: ""
+      appToken: ""
       # -- App-level token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
     ## Settings for Mattermost.
