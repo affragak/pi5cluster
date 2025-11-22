@@ -673,7 +673,7 @@ communications:
 ## Global Botkube configuration.
 settings:
   # -- Cluster name to differentiate incoming messages.
-  clusterName: not-configured
+  clusterName: k3s-pi5cluster
 
   # -- Health check port.
   healthPort: 2114
@@ -820,7 +820,10 @@ extraEnv:
 
 # -- Extra volumes to pass to the Botkube container. Mount it later with extraVolumeMounts.
 # [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/volume/#Volume).
-extraVolumes: []
+extraVolumes:
+  - name: plugins-cache
+    persistentvolumeclaim:
+      claimName: botkube-plugins-cache
 # - name: extra-volume-0
 #   secret:
 #     secretName: {secret-name}
@@ -835,7 +838,9 @@ extraVolumes: []
 
 # -- Extra volume mounts to pass to the Botkube container.
 # [Ref docs](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#volumes-1).
-extraVolumeMounts: []
+extraVolumeMounts:
+  - name: plugins-cache
+    mountPath: /tmp/
 # - name: extra-volume-0
 #   mountPath: /mnt/volume0
 #   readOnly: true
