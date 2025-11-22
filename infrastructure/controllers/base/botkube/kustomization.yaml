@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - release.yaml
   - repository.yaml
+  - pvc.yaml
 
 configMapGenerator:
   - name: botkube-values
