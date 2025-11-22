@@ -537,7 +537,7 @@ communications:
       channels:
         "default":
           # -- Slack channel name without '#' prefix where you have added Botkube and want to receive notifications in.
-          name: "K3S-Pi5Cluster"
+          name: "k3s-pi5cluster"
           bindings:
             # -- Executors configuration for a given channel.
             executors:
