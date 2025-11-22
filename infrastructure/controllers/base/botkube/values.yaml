@@ -548,14 +548,17 @@ communications:
               - k8s-recommendation-events
       # -- Bot token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
-      botToken:
+      botToken: ""
+      # -- App-level token for your own app for Slack.
+      # [Ref doc](https://api.slack.com/authentication/token-types).
+      appToken: ""
+    extraEnv:
+      - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_BOTTOKEN
         valueFrom:
           secretKeyRef:
             name: botkube-slack-secrets
             key: botToken
-      # -- App-level token for your own app for Slack.
-      # [Ref doc](https://api.slack.com/authentication/token-types).
-      appToken:
+      - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_APPTOKEN
         valueFrom:
           secretKeyRef:
             name: botkube-slack-secrets
