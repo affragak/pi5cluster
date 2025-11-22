@@ -737,33 +737,43 @@ serviceMonitor:
 
 ## Botkube Deployment.
 deployment:
+  livenessProbe:
+    initialDelaySeconds: 120 # Wait 2 minutes before first check
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6 # Allow 6 failures (60 seconds)
+  readinessProbe:
+    initialDelaySeconds: 120 # Wait 2 minutes before first check
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
   # -- Extra annotations to pass to the Botkube Deployment.
   annotations: {}
   # -- Liveness probe.
-  livenessProbe:
-    # -- The liveness probe initial delay seconds.
-    initialDelaySeconds: 1
-    # -- The liveness probe period seconds.
-    periodSeconds: 2
-    # -- The liveness probe timeout seconds.
-    timeoutSeconds: 1
-    # -- The liveness probe failure threshold.
-    failureThreshold: 35
-    # -- The liveness probe success threshold.
-    successThreshold: 1
-
-  # -- Readiness probe.
-  readinessProbe:
-    # -- The readiness probe initial delay seconds.
-    initialDelaySeconds: 1
-    # -- The readiness probe period seconds.
-    periodSeconds: 2
-    # -- The readiness probe timeout seconds.
-    timeoutSeconds: 1
-    # -- The readiness probe failure threshold.
-    failureThreshold: 35
-    # -- The readiness probe success threshold.
-    successThreshold: 1
+  # livenessProbe:
+  #   # -- The liveness probe initial delay seconds.
+  #   initialDelaySeconds: 1
+  #   # -- The liveness probe period seconds.
+  #   periodSeconds: 2
+  #   # -- The liveness probe timeout seconds.
+  #   timeoutSeconds: 1
+  #   # -- The liveness probe failure threshold.
+  #   failureThreshold: 35
+  #   # -- The liveness probe success threshold.
+  #   successThreshold: 1
+  #
+  # # -- Readiness probe.
+  # readinessProbe:
+  #   # -- The readiness probe initial delay seconds.
+  #   initialDelaySeconds: 1
+  #   # -- The readiness probe period seconds.
+  #   periodSeconds: 2
+  #   # -- The readiness probe timeout seconds.
+  #   timeoutSeconds: 1
+  #   # -- The readiness probe failure threshold.
+  #   failureThreshold: 35
+  #   # -- The readiness probe success threshold.
+  #   successThreshold: 1
 
 # -- Number of Botkube pods to load balance between.
 # Currently, Botkube doesn't support HA.
