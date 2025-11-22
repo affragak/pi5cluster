@@ -553,12 +553,12 @@ communications:
       # [Ref doc](https://api.slack.com/authentication/token-types).
       appToken: ""
 extraEnv:
-  - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_BOTTOKEN
+  - name: COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_BOTTOKEN
     valueFrom:
       secretKeyRef:
         name: botkube-slack-secrets
         key: botToken
-  - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_APPTOKEN
+  - name: COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_APPTOKEN
     valueFrom:
       secretKeyRef:
         name: botkube-slack-secrets
