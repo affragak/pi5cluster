@@ -548,16 +548,20 @@ communications:
               - k8s-recommendation-events
       # -- Bot token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
-      botToken:
-        valueFrom:
-          secretKeyRef:
-            name: botkube-slack-secrets
-            key: botToken
-      appToken:
-        valueFrom:
-          secretKeyRef:
-            name: botkube-slack-secrets
-            key: appToken
+extraEnv:
+  - name: COMMUNICATIONS_DEFAULT-GROUP_SOCKETSLACK_BOTTOKEN
+    valueFrom:
+      secretKeyRef:
+        name: botkube-slack-secrets
+        key: botToken
+  - name: COMMUNICATIONS_DEFAULT-GROUP_SOCKETSLACK_APPTOKEN
+    valueFrom:
+      secretKeyRef:
+        name: botkube-slack-secrets
+        key: appToken
+
+      botToken: ''
+      appToken: ''
       # -- App-level token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
     ## Settings for Mattermost.
