@@ -549,19 +549,19 @@ communications:
       # -- Bot token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
 extraEnv:
-  - name: COMMUNICATIONS_DEFAULT-GROUP_SOCKETSLACK_BOTTOKEN
-    valueFrom:
-      secretKeyRef:
-        name: botkube-slack-secrets
-        key: botToken
-  - name: COMMUNICATIONS_DEFAULT-GROUP_SOCKETSLACK_APPTOKEN
+  - name: BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_APP__TOKEN
     valueFrom:
       secretKeyRef:
         name: botkube-slack-secrets
         key: appToken
+  - name: BOTKUBE_COMMUNICATIONS_DEFAULT-GROUP_SOCKET__SLACK_BOT__TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: botkube-slack-secrets
+        key: botToken
 
-      botToken: ''
-      appToken: ''
+#      botToken: ''
+#      appToken: ''
       # -- App-level token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
     ## Settings for Mattermost.
