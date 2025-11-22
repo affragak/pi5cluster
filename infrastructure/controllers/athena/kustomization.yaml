@@ -8,3 +8,4 @@ resources:
   - cloudnativepg
   - synology-csi
   - renovate
+  - botkube
