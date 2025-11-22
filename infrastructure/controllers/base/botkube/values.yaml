@@ -552,17 +552,17 @@ communications:
       # -- App-level token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
       appToken: ""
-    extraEnv:
-      - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_BOTTOKEN
-        valueFrom:
-          secretKeyRef:
-            name: botkube-slack-secrets
-            key: botToken
-      - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_APPTOKEN
-        valueFrom:
-          secretKeyRef:
-            name: botkube-slack-secrets
-            key: appToken
+extraEnv:
+  - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_BOTTOKEN
+    valueFrom:
+      secretKeyRef:
+        name: botkube-slack-secrets
+        key: botToken
+  - name: BOTKUBE_COMMUNICATIONS_DEFAULT_GROUP_SOCKETSLACK_APPTOKEN
+    valueFrom:
+      secretKeyRef:
+        name: botkube-slack-secrets
+        key: appToken
     ## Settings for Mattermost.
     mattermost:
       # -- If true, enables Mattermost bot.
