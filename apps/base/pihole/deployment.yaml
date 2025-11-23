@@ -63,4 +63,4 @@ spec:
       volumes:
         - name: pihole
           persistentVolumeClaim:
-            claimName: pihole-data-pvc
+            claimName: pihole-data-nfs
