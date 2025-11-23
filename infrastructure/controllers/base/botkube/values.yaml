@@ -460,7 +460,13 @@ sources:
         url:
           "http://localhost:9090" # Prometheus endpoint without api version and resource.
           # See the Configuration section for full config properties.
-
+        ignoreOldAlerts: true
+        # Only the alerts that have state provided in this config will be sent as notification. https://pkg.go.dev/github.com/prometheus/prometheus/rules#AlertState
+        alertStates: ["firing", "pending", "inactive"]
+        # Logging configuration
+        log:
+          # Log level
+          level: info
 # -- Map of executors. Executor contains configuration for running `kubectl` commands.
 # The property name under `executors` is an alias for a given configuration. You can define multiple executor configurations with different names.
 # Key name is used as a binding reference.
