@@ -504,6 +504,16 @@ executors:
       displayName: "Helm"
       enabled: true
       context: *default-plugin-context
+  flux:
+    botkubeExtra/flux:
+      displayName: "Flux"
+      enabled: true
+      context:
+        rbac:
+          group:
+            type: Static
+            static:
+              values: ["flux"]
 
 # -- Custom aliases for given commands.
 # The aliases are replaced with the underlying command before executing it.
