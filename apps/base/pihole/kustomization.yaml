@@ -5,4 +5,5 @@ resources:
   - storage.yaml
   - deployment.yaml
   - networking.yaml
+  - pvc.yaml
   # - ingress.yaml
