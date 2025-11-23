@@ -504,7 +504,6 @@ executors:
       displayName: "Helm"
       enabled: true
       context: *default-plugin-context
-  flux:
     botkubeExtra/flux:
       displayName: "Flux"
       enabled: true
@@ -566,7 +565,6 @@ communications:
             # -- Executors configuration for a given channel.
             executors:
               - k8s-default-tools
-              - flux
             # -- Notification sources configuration for a given channel.
             sources:
               - k8s-err-events
