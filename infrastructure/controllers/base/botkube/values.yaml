@@ -458,7 +458,7 @@ sources:
       enabled: true
       config:
         url:
-          "http://localhost:9090" # Prometheus endpoint without api version and resource.
+          "http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090" # Prometheus endpoint without api version and resource.
           # See the Configuration section for full config properties.
         ignoreOldAlerts: true
         # Only the alerts that have state provided in this config will be sent as notification. https://pkg.go.dev/github.com/prometheus/prometheus/rules#AlertState
