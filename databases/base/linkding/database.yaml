@@ -9,18 +9,9 @@ spec:
   instances: 2
   primaryUpdateStrategy: unsupervised
   backup:
-  retentionPolicy: "3d"
-  barmanObjectStore:
-    destinationPath: "s3://backups/"
-    s3Credentials:
-      accessKeyId:
-        name: minio-s3
-        key: ACCESS_KEY_ID
-      secretAccessKey:
-        name: minio-s3
-        key: ACCESS_SECRET_KEY
-    wal:
-      compression: gzip
+    objectStore:
+      name: minio-store
+      namespace: linkding
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
