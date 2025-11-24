@@ -8,6 +8,19 @@ spec:
   imageName: quay.io/enterprisedb/postgresql:16.8
   instances: 2
   primaryUpdateStrategy: unsupervised
+  backup:
+  retentionPolicy: "3d"
+  barmanObjectStore:
+    destinationPath: "s3://backups/"
+    s3Credentials:
+      accessKeyId:
+        name: minio-s3
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: minio-s3
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
