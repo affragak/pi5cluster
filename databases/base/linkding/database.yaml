@@ -8,20 +8,6 @@ spec:
   imageName: quay.io/enterprisedb/postgresql:16.8
   instances: 2
   primaryUpdateStrategy: unsupervised
-  backup:
-    barmanObjectStore:
-      destinationPath: "s3://backups/"
-      endpointURL: "http://atlas.uclab8.net:9000"
-      s3Credentials:
-        accessKeyId:
-          name: minio-s3
-          key: ACCESS_KEY_ID
-        secretAccessKey:
-          name: minio-s3
-          key: ACCESS_SECRET_KEY
-      wal:
-        compression: gzip
-    retentionPolicy: "3d"
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
