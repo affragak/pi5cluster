@@ -11,7 +11,7 @@ spec:
       database: app
       owner: app
       secret:
-        name: customer1-db-credentials
+        name: customer1-db-creds
 
   # bootstrap:
   #   recovery:
