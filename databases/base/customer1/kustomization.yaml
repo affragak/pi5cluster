@@ -6,3 +6,4 @@ resources:
   - minio-s3-objectstore.yaml
   - customer1-db-creds.yaml
   - db.yaml
+  - backup.yaml
