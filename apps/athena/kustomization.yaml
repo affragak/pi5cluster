@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - hugo-blog
   - pihole
-  - linkding
+  # - linkding
   - mealie
   - uclabdotdev
   - homepage
