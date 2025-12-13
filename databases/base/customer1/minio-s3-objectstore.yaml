@@ -1,7 +1,7 @@
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
-  name: minio-store
+  name: customer1-objectstore
   namespace: customer1
 spec:
   configuration:
