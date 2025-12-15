@@ -1,0 +1,34 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz
+  namespace: default
+  labels:
+    app: quiz
+spec:
+  selector:
+    matchLabels:
+      app: quiz
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: quiz
+      labels:
+        app: quiz
+    spec:
+      containers:
+        - name: quiz
+          image: gitlab.uclab8.net:5050/affragak/quiz:v1.0.6
+          imagePullPolicy:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 5000
+              name: quiz
