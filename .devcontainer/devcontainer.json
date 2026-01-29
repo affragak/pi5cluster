@@ -4,10 +4,12 @@
     "dockerfile": "Dockerfile"
   },
   "remoteEnv": {
-    "MISE_GITHUB_TOKEN": "${localEnv:MISE_GITHUB_TOKEN}"
+    "MISE_GITHUB_TOKEN": "${localEnv:MISE_GITHUB_TOKEN}",
+    "VAULT_USERNAME": "${localEnv:VAULT_USERNAME}",
+    "VAULT_PASSWORD": "${localEnv:VAULT_PASSWORD}"
   },
   "forwardPorts": [
     "8000"
   ],
-  "postCreateCommand": ".devcontainer/scripts/setup"
+  "postCreateCommand": ".devcontainer/scripts/setup && .devcontainer/scripts/vault && direnv allow"
 }

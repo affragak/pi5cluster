@@ -1,0 +1,41 @@
+#!/usr/bin/bash
+# Function to check if Vault token is valid
+vault_token_valid() {
+  [ -f "$VAULT_TOKEN_FILE" ] &&
+    VAULT_TOKEN=$(cat "$VAULT_TOKEN_FILE") vault token lookup &>/dev/null
+}
+
+# Auto-login if needed
+if ! vault_token_valid; then
+  if [ -n "$VAULT_USERNAME" ] && [ -n "$VAULT_PASSWORD" ]; then
+    echo "Logging into Vault..."
+    VAULT_TOKEN=$(vault login -method=userpass \
+      username="$VAULT_USERNAME" \
+      password="$VAULT_PASSWORD" \
+      -field=token 2>/dev/null)
+
+    if [ -n "$VAULT_TOKEN" ]; then
+      echo "$VAULT_TOKEN" >"$VAULT_TOKEN_FILE"
+      chmod 600 "$VAULT_TOKEN_FILE"
+    fi
+  else
+    echo "⚠️  VAULT_USERNAME or VAULT_PASSWORD not set"
+    return 1
+  fi
+else
+  export VAULT_TOKEN=$(cat "$VAULT_TOKEN_FILE")
+fi
+
+# Fetch kubeconfig if token is valid
+if vault_token_valid; then
+  if [ ! -f "$KUBECONFIG" ] || [ "$(find "$KUBECONFIG" -mmin +60 2>/dev/null)" ]; then
+    echo "Fetching kubeconfig from Vault..."
+    vault kv get -field=kubeconfig apps/pi5cluster >"$KUBECONFIG" 2>/dev/null ||
+      vault read -field=kubeconfig apps/pi5cluster >"$KUBECONFIG" 2>/dev/null
+
+    if [ -f "$KUBECONFIG" ]; then
+      chmod 600 "$KUBECONFIG"
+      echo "✓ Kubeconfig updated"
+    fi
+  fi
+fi
