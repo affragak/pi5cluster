@@ -1,5 +1,4 @@
 kubeconfig
-.envrc
 .sops.yaml
 age.agekey
 admin/
