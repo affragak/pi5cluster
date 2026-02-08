@@ -11,5 +11,5 @@
   "forwardPorts": [
     "8000"
   ],
-  "postCreateCommand": ".devcontainer/scripts/setup && .devcontainer/scripts/vault && direnv allow"
+  "postCreateCommand": ".devcontainer/scripts/setup && .devcontainer/scripts/vault"
 }
