@@ -10,9 +10,11 @@ spec:
   issuerRef:
     name: vault-issuer
     kind: Issuer
+
   commonName: vault.vault.svc.cluster.local
+
+  # DNS names go here
   dnsNames:
-    # Internal headless service (for Raft communication)
     - vault-0.vault-internal
     - vault-1.vault-internal
     - vault-0.vault-internal.vault.svc.cluster.local
@@ -27,23 +29,16 @@ spec:
     - vault-active.vault.svc.cluster.local
     - vault.local
     - localhost
+
+  # ONLY IP addresses go here
   ipAddresses:
     - 127.0.0.1
-
-    # Main service
-    - vault
-    - vault.vault
-    - vault.vault.svc
-    - vault.vault.svc.cluster.local
-
-    # Active service
-    - vault-active
-    - vault-active.vault.svc.cluster.local
 
   privateKey:
     algorithm: RSA
     encoding: PKCS1
     size: 2048
+
   usages:
     - server auth
     - client auth
