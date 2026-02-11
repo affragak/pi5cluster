@@ -9,3 +9,4 @@ resources:
   - synology-csi
   - renovate
   - botkube
+  - vault
