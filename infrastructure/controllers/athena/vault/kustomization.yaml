@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: vault
 resources:
   - ../../base/vault/
+  - vault-cert.yaml
