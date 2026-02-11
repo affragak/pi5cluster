@@ -1,0 +1,122 @@
+# Vault Helm chart Value Overrides
+global:
+  enabled: true
+  tlsDisable: false
+
+injector:
+  enabled: true
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 256Mi
+      cpu: 250m
+
+server:
+  # Use Open Source image (or Enterprise if you have a license)
+  image:
+    repository: "hashicorp/vault"
+    tag: "1.16.1"
+    pullPolicy: IfNotPresent
+
+  # Reasonable resources for k3s/local cluster
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 500m
+    limits:
+      memory: 1Gi
+      cpu: 1000m
+
+  # Readiness and liveness probes
+  readinessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
+  livenessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true"
+    initialDelaySeconds: 60
+
+  # Environment variables for TLS
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/userconfig/vault-server-tls/ca.crt
+    VAULT_TLSCERT: /vault/userconfig/vault-server-tls/tls.crt
+    VAULT_TLSKEY: /vault/userconfig/vault-server-tls/tls.key
+
+  # Mount the TLS secret (use the correct secret name!)
+  volumes:
+    - name: userconfig-vault-server-tls
+      secret:
+        defaultMode: 420
+        secretName: vault-server-tls # This matches your actual secret
+
+  volumeMounts:
+    - mountPath: /vault/userconfig/vault-server-tls
+      name: userconfig-vault-server-tls
+      readOnly: true
+
+  # Audit storage (optional, but good practice)
+  auditStorage:
+    enabled: true
+    size: 10Gi
+
+  standalone:
+    enabled: false
+
+  # High Availability with Raft
+  ha:
+    enabled: true
+    replicas: 2 # You have certs for vault-0 and vault-1
+
+    raft:
+      enabled: true
+      setNodeId: true
+
+      config: |
+        ui = true
+        cluster_name = "vault-integrated-storage"
+
+        listener "tcp" {
+          tls_disable = false
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+          tls_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+          tls_key_file  = "/vault/userconfig/vault-server-tls/tls.key"
+          tls_client_ca_file = "/vault/userconfig/vault-server-tls/ca.crt"
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+          
+          retry_join {
+            leader_api_addr = "https://vault-0.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/vault-server-tls/ca.crt"
+            leader_client_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+            leader_client_key_file = "/vault/userconfig/vault-server-tls/tls.key"
+            leader_tls_servername = "vault.vault.svc.cluster.local"
+          }
+          
+          retry_join {
+            leader_api_addr = "https://vault-1.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/vault-server-tls/ca.crt"
+            leader_client_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+            leader_client_key_file = "/vault/userconfig/vault-server-tls/tls.key"
+            leader_tls_servername = "vault.vault.svc.cluster.local"
+          }
+        }
+
+        service_registration "kubernetes" {}
+
+  # Service configuration
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 8200
+    targetPort: 8200
+
+# Vault UI
+ui:
+  enabled: true
+  serviceType: "ClusterIP" # Use ClusterIP, then add Ingress if needed
+  externalPort: 8200

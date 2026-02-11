@@ -4,3 +4,13 @@ namespace: vault
 resources:
   - ../../base/vault/
   - vault-cert.yaml
+  - repository.yaml
+  - release.yaml
+
+configMapGenerator:
+  - name: vault-values
+    files:
+      - values.yaml=values.yaml
+
+configurations:
+  - kustomizeconfig.yaml
