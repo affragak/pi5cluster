@@ -17,7 +17,7 @@ server:
   # Use Open Source image (or Enterprise if you have a license)
   image:
     repository: "hashicorp/vault"
-    tag: "1.16.1"
+    tag: "1.21.3"
     pullPolicy: IfNotPresent
 
   # Reasonable resources for k3s/local cluster
