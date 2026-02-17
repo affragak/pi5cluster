@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hausarztpraxis
+  namespace: hausarztpraxis
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: nginx
+      version: "22.2.1"
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: hausarztpraxis
+      interval: 1m
+  values:
+    cloneStaticSiteFromGit:
+      enabled: true
+      repository: "https://gitlab.uclab8.net/affragak/hausarztpraxis.git"
+      branch: main
+      gitClone:
+        command:
+          - /bin/bash
+          - -ec
+          - |
+            [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
+            git clone {{ .Values.cloneStaticSiteFromGit.repository }} --branch {{ .Values.cloneStaticSiteFromGit.branch }} /tmp/app
+            [[ "$?" -eq 0 ]] && shopt -s dotglob && rm -rf /app/* && mv /tmp/app/* /app/
+
+    serverBlock: |-
+      server {
+        listen 8080;
+        root /app/public;
+        index index.html;
+      }
+    service:
+      type: ClusterIP
