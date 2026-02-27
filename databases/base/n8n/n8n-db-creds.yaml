@@ -11,6 +11,8 @@ spec:
   target:
     name: n8n-db-creds
     creationPolicy: Owner
+    template:
+      type: kubernetes.io/basic-auth
   data:
     - secretKey: username
       remoteRef:
