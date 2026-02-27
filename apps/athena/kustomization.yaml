@@ -10,4 +10,4 @@ resources:
   - mkdocs
   - quiz
   - hausarztpraxis
-  - n8n
+  # - n8n
