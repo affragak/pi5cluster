@@ -4,3 +4,4 @@ metadata:
   name: n8n
   labels:
     pod-security.kubernetes.io/enforce: restricted
+    app.kubernetes.io/component: monitoring
