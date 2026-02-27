@@ -1,0 +1,39 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: n8n-db
+  # name: n8n-db2
+spec:
+  instances: 2
+
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      secret:
+        name: n8n-db-creds
+
+  # bootstrap:
+  #   recovery:
+  #     database: app
+  #     owner: app
+  #     source: source
+  #     secret:
+  #       name: n8n-db-credentials
+  #
+  # externalClusters:
+  #   - name: source
+  #     plugin:
+  #       name: barman-cloud.cloudnative-pg.io
+  #       parameters:
+  #         barmanObjectName: n8n-objectstore
+  #         serverName: n8n-db
+
+  storage:
+    size: 1Gi
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: n8n-objectstore
