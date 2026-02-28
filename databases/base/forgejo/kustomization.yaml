@@ -4,6 +4,6 @@ resources:
   - namespace.yaml
   - minio-secret.yaml
   - minio-s3-objectstore.yaml
-  - forgejo-db-creds.yaml
+  - forgejo-db-credentials.yaml
   - db.yaml
   - backup.yaml
