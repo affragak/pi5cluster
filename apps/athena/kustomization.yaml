@@ -5,7 +5,7 @@ resources:
   - pihole
   - linkding
   - mealie
-  - uclabdotdev
+  # - uclabdotdev
   - homepage
   - mkdocs
   - quiz
