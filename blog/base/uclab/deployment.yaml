@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uclab
+  namespace: uclab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uclab
+  template:
+    metadata:
+      labels:
+        app: uclab
+    spec:
+      imagePullSecrets:
+        - name: forgejo-registry
+      containers:
+        - name: nginx
+          image: forgejo.uclab.dev/affragak/uclab:placeholder
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 64Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
