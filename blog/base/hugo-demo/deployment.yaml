@@ -17,7 +17,7 @@ spec:
         - name: forgejo-registry
       containers:
         - name: nginx
-          image: forgejo.uclab.dev/affragak/hugo:9f2da9b
+          image: forgejo.uclab.dev/affragak/hugo:c068639
           ports:
             - containerPort: 8080
           resources:
