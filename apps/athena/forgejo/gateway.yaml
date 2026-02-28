@@ -1,0 +1,26 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: forgejo
+  namespace: forgejo
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production # Specify the name of your issuer resource
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - hostname: forgejo.uclab.dev # Specify a valid domain to reach your application
+      name: forgejo-uclab-dev-http
+      port: 80
+      protocol: HTTP
+    - hostname: forgejo.uclab.dev # Specify a valid domain to reach your application
+      name: forgejo-uclab-dev-https
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: forgejo-uclab-tls # Specify the secret name to be used with your application
+      allowedRoutes:
+        namespaces:
+          from: All
