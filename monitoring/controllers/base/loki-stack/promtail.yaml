@@ -16,7 +16,7 @@ spec:
       serviceAccount: promtail-serviceaccount
       containers:
         - name: promtail-container
-          image: grafana/promtail:3.6.3
+          image: grafana/promtail:3.6.7
           args:
             - -config.file=/etc/promtail/promtail.yaml
           env:
