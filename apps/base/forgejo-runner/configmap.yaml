@@ -25,7 +25,7 @@ data:
     container:
       network: host
       privileged: false
-      options:
+      options: "--env DOCKER_HOST=tcp://localhost:2375"
       valid_volumes: []
       docker_host: tcp://localhost:2375
 kind: ConfigMap
