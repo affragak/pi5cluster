@@ -12,3 +12,4 @@ resources:
   - hausarztpraxis
   - n8n
   - forgejo
+  - forgejo-runner
