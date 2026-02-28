@@ -13,3 +13,4 @@ resources:
   - n8n
   - forgejo
   - forgejo-runner
+  - hugo-demo
