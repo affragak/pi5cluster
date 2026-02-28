@@ -21,3 +21,4 @@ spec:
         selector:
           dnsZones:
             - "uclab8.net"
+            - "uclab.dev"
