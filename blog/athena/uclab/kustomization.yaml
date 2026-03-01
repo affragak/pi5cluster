@@ -5,3 +5,4 @@ resources:
   - ../../base/uclab/
   - cloudflare-secret.yaml
   - cloudflare.yaml
+  - network-policy.yaml
