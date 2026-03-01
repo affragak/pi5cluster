@@ -4,7 +4,7 @@ metadata:
   name: blog
   namespace: flux-system
 spec:
-  interval: 5m0s
+  interval: 1m
   retryInterval: 1m
   timeout: 5m
   sourceRef:
