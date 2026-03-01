@@ -2,6 +2,7 @@
 age = "latest"
 cilium-cli = "latest"
 cilium-hubble = "latest"
+cosign = "latest"
 direnv = "latest"
 flux2 = "latest"
 helm = "latest"
