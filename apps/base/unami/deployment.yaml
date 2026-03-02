@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: umami
+  namespace: umami
+  labels:
+    app: umami
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: umami
+  template:
+    metadata:
+      labels:
+        app: umami
+    spec:
+      containers:
+        - name: umami
+          image: ghcr.io/umami-software/umami:3.0.3
+          ports:
+            - containerPort: 3000
+
+          env:
+            # From ConfigMap
+            - name: DB_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  name: unami-config
+                  key: DB_TYPE
+
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: unami-config
+                  key: DB_HOST
+
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: unami-config
+                  key: DB_PORT
+
+            - name: DB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: unami-config
+                  key: DB_DATABASE
+
+            # From Secret
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: unami-env-container-db
+                  key: DB_USERNAME
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: unami-env-container-db
+                  key: DB_PASSWORD
+
+            # Constructed variable (THIS WORKS)
+            - name: DATABASE_URL
+              value: "postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_DATABASE)"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /api/heartbeat
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /api/heartbeat
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
