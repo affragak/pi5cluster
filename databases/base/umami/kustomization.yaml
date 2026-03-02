@@ -4,6 +4,6 @@ resources:
   - namespace.yaml
   - minio-secret.yaml
   - minio-s3-objectstore.yaml
-  - unami-db-creds.yaml
+  - umami-db-creds.yaml
   - db.yaml
   - backup.yaml

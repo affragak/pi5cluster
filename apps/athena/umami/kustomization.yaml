@@ -1,8 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: unami
+namespace: umami
 resources:
-  - ../../base/unami/
+  - ../../base/umami/
   - certificate.yaml
   - gateway.yaml
   - httproute.yaml

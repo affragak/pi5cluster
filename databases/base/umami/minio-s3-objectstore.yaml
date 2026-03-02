@@ -1,8 +1,8 @@
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
-  name: unami-objectstore
-  namespace: unami
+  name: umami-objectstore
+  namespace: umami
 spec:
   configuration:
     destinationPath: "s3://backups/"

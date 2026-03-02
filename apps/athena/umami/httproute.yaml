@@ -1,16 +1,16 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: unami
-  namespace: unami
+  name: umami
+  namespace: umami
 spec:
   hostnames:
-    - unami.uclab.dev # Specify a valid domain to reach your application
+    - umami.uclab.dev # Specify a valid domain to reach your application
   parentRefs:
-    - name: unami
+    - name: umami
   rules:
     - backendRefs:
-        - name: unami-server # Specify the service of the application
+        - name: umami-server # Specify the service of the application
           port: 3000
       matches:
         - path:

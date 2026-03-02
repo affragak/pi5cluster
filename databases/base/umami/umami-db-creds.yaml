@@ -1,24 +1,24 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: unami-db-creds
-  namespace: unami
+  name: umami-db-creds
+  namespace: umami
 spec:
   refreshInterval: "15s"
   secretStoreRef:
     name: vault-backend-global
     kind: ClusterSecretStore
   target:
-    name: unami-db-creds
+    name: umami-db-creds
     creationPolicy: Owner
     template:
       type: kubernetes.io/basic-auth
   data:
     - secretKey: username
       remoteRef:
-        key: unami-db-creds
+        key: umami-db-creds
         property: username
     - secretKey: password
       remoteRef:
-        key: unami-db-creds
+        key: umami-db-creds
         property: password

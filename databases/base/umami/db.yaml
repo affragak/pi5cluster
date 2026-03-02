@@ -1,16 +1,16 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: unami-db
+  name: umami-db
 spec:
   instances: 2
 
   bootstrap:
     initdb:
-      database: unami
-      owner: unami
+      database: umami
+      owner: umami
       secret:
-        name: unami-db-creds
+        name: umami-db-creds
 
   # bootstrap:
   #   recovery:
@@ -18,15 +18,15 @@ spec:
   #     owner: app
   #     source: source
   #     secret:
-  #       name: unami-db-credentials
+  #       name: umami-db-credentials
   #
   # externalClusters:
   #   - name: source
   #     plugin:
   #       name: barman-cloud.cloudnative-pg.io
   #       parameters:
-  #         barmanObjectName: unami-objectstore
-  #         serverName: unami-db-v1
+  #         barmanObjectName: umami-objectstore
+  #         serverName: umami-db-v1
 
   storage:
     size: 5Gi
@@ -35,6 +35,6 @@ spec:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
       parameters:
-        barmanObjectName: unami-objectstore
+        barmanObjectName: umami-objectstore
   monitoring:
     enablePodMonitor: true
