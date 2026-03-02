@@ -25,38 +25,38 @@ spec:
             - name: DB_TYPE
               valueFrom:
                 configMapKeyRef:
-                  name: unami-config
+                  name: umami-config
                   key: DB_TYPE
 
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: unami-config
+                  name: umami-config
                   key: DB_HOST
 
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: unami-config
+                  name: umami-config
                   key: DB_PORT
 
             - name: DB_DATABASE
               valueFrom:
                 configMapKeyRef:
-                  name: unami-config
+                  name: umami-config
                   key: DB_DATABASE
 
             # From Secret
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: unami-env-container-db
+                  name: umami-env-container-db
                   key: DB_USERNAME
 
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: unami-env-container-db
+                  name: umami-env-container-db
                   key: DB_PASSWORD
 
             # Constructed variable (THIS WORKS)

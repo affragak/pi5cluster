@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: unami-config
+  name: umami-config
 data:
   DB_TYPE: "postgresdb"
-  DB_HOST: "unami-db-rw.unami.svc.cluster.local"
+  DB_HOST: "umami-db-rw.umami.svc.cluster.local"
   DB_PORT: "5432"
-  DB_DATABASE: "unami"
+  DB_DATABASE: "umami"
