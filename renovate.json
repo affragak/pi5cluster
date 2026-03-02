@@ -14,7 +14,7 @@
         "docker"
       ],
       "matchPackageNames": [
-        "sissbruecker/linkding"
+        "^ghcr\\.io/fluxcd/"
       ],
       "enabled": false
     }
