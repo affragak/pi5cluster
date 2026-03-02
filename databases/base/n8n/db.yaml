@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: n8n-db-v1
+  name: n8n-db-v2
 spec:
   instances: 2
 
@@ -26,10 +26,10 @@ spec:
         name: barman-cloud.cloudnative-pg.io
         parameters:
           barmanObjectName: n8n-objectstore
-          serverName: n8n-db
+          serverName: n8n-db-v1
 
   storage:
-    size: 1Gi
+    size: 5Gi
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
