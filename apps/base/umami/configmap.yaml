@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: unami-config
 data:
+  DB_TYPE: "postgresdb"
   DB_HOST: "unami-db-rw.unami.svc.cluster.local"
   DB_PORT: "5432"
   DB_DATABASE: "unami"
