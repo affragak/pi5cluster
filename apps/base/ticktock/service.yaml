@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticktock-quiz
+spec:
+  selector:
+    app: ticktock-quiz
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80

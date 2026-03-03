@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticktock-quiz
+  labels:
+    app: ticktock-quiz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticktock-quiz
+  template:
+    metadata:
+      labels:
+        app: ticktock-quiz
+    spec:
+      containers:
+        - name: ticktock-quiz
+          image: forgejo.uclab.dev/affragak/ticktock-quiz:70822ad
+          imagePullPolicy: Never # use the locally imported image
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
