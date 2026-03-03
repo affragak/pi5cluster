@@ -3,7 +3,9 @@ kind: Kustomization
 namespace: umami
 resources:
   - ../../base/umami/
-  - certificate.yaml
-  - gateway.yaml
-  - httproute.yaml
-  - httproute2.yaml
+  # - certificate.yaml
+  # - gateway.yaml
+  # - httproute.yaml
+  # - httproute2.yaml
+  - cloudflare-secret.yaml
+  - cloudflare.yaml
