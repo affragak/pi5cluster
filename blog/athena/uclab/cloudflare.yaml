@@ -81,6 +81,9 @@ data:
 
     ingress:
     - hostname: uclab.dev
+      path: /stats/*
+      service: http://umami-server.umami.svc.cluster.local:3000
+    - hostname: uclab.dev
       service: http://uclab:80
     - hostname: umami.uclab.dev
       service: http://umami-server.umami.svc.cluster.local:3000
