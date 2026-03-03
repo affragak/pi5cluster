@@ -81,7 +81,7 @@ data:
 
     ingress:
     - hostname: uclab.dev
-      path: /stats/*
+      path: /stats/.*
       service: http://10.10.10.110:80
       originRequest:
         httpHostHeader: uclab.dev
