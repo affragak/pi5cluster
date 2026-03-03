@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ticktock-quiz
-          image: forgejo.uclab.dev/affragak/ticktock-quiz:70822ad
+          image: forgejo.uclab.dev/affragak/ticktock-quiz:8f34702
           ports:
             - containerPort: 80
           resources:
