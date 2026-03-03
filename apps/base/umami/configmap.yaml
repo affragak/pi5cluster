@@ -7,3 +7,5 @@ data:
   DB_HOST: "umami-db-rw.umami.svc.cluster.local"
   DB_PORT: "5432"
   DB_DATABASE: "umami"
+  TRACKER_SCRIPT_NAME: "x.js"
+  COLLECT_API_ENDPOINT: "/api/x"

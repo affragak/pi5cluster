@@ -45,6 +45,16 @@ spec:
                 configMapKeyRef:
                   name: umami-config
                   key: DB_DATABASE
+            - name: TRACKER_SCRIPT_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: umami-config
+                  key: TRACKER_SCRIPT_NAME
+            - name: COLLECT_API_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: umami-config
+                  key: COLLECT_API_ENDPOINT
 
             # From Secret
             - name: DB_USERNAME
