@@ -4,9 +4,9 @@ metadata:
   name: uclab-image-policy
 spec:
   match:
-    - group: apps
+    - group: ""
       version: v1
-      resource: deployments
+      resource: pods
       selector:
         matchLabels:
           app: uclab
