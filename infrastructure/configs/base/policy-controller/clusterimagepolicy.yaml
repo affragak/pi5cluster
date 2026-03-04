@@ -11,7 +11,7 @@ spec:
         matchLabels:
           app: uclab
   images:
-    - glob: "forgejo.uclab.dev/affragak/uclab:*"
+    - glob: "forgejo.uclab.dev/affragak/uclab**"
   authorities:
     - name: uclab
       key:
