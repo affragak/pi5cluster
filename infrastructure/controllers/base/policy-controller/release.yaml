@@ -14,3 +14,7 @@ spec:
         name: sigstore
         namespace: cosign-system
       interval: 12h
+  values:
+    webhook:
+      imagePullSecrets:
+        - name: forgejo-registry
