@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: cosign-system
 resources:
   - ../../base/policy-controller/
+  - cosign-pub-key-secret.yaml
