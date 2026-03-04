@@ -4,9 +4,11 @@ metadata:
   name: uclab-image-policy
 spec:
   match:
-    - selector:
+    - version: "v1"
+      resource: "pods"
+      selector:
         matchLabels:
-          app: uclab # only pods with this label are checked
+          app: uclab
   images:
     - glob: "forgejo.uclab.dev/affragak/uclab:*"
   authorities:
