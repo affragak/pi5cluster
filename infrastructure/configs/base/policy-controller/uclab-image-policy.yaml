@@ -10,6 +10,12 @@ spec:
       selector:
         matchLabels:
           app: uclab
+    - group: apps
+      version: v1
+      resource: replicasets
+      selector:
+        matchLabels:
+          app: uclab
     - group: ""
       version: v1
       resource: pods
