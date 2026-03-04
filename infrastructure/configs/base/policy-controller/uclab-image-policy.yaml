@@ -4,24 +4,27 @@ metadata:
   name: uclab-image-policy
 spec:
   match:
-    - group: apps
-      version: v1
-      resource: deployments
-      selector:
+    - namespaceSelector:
         matchLabels:
-          app: uclab
-    - group: apps
-      version: v1
-      resource: replicasets
-      selector:
-        matchLabels:
-          app: uclab
-    - group: ""
-      version: v1
-      resource: pods
-      selector:
-        matchLabels:
-          app: uclab
+          kubernetes.io/metadata.name: uclab
+    # - group: apps
+    #   version: v1
+    #   resource: deployments
+    #   selector:
+    #     matchLabels:
+    #       app: uclab
+    # - group: apps
+    #   version: v1
+    #   resource: replicasets
+    #   selector:
+    #     matchLabels:
+    #       app: uclab
+    # - group: ""
+    #   version: v1
+    #   resource: pods
+    #   selector:
+    #     matchLabels:
+    #       app: uclab
   images:
     - glob: "forgejo.uclab.dev/affragak/uclab**"
   authorities:
