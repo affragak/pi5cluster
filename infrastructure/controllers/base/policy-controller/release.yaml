@@ -16,5 +16,16 @@ spec:
       interval: 12h
   values:
     webhook:
-      imagePullSecrets:
-        - name: forgejo-registry
+      env:
+        DOCKER_CONFIG: /var/registry-auth
+      volumeMounts:
+        - name: registry-auth
+          mountPath: /var/registry-auth
+          readOnly: true
+      volumes:
+        - name: registry-auth
+          secret:
+            secretName: forgejo-registry
+            items:
+              - key: .dockerconfigjson
+                path: config.json
