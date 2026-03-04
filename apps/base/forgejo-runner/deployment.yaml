@@ -39,9 +39,6 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/docker
               name: docker-storage
-            - mountPath: /data
-              name: runner-data
-
         - command:
             - sh
             - -c
