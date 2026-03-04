@@ -18,7 +18,7 @@ spec:
         secretRef:
           name: cosign-pub-key
           namespace: cosign-system
-      remoteOpts:
-        auth:
-          secretRef:
-            name: forgejo-registry
+  remoteOpts:
+    auth:
+      secretRef:
+        name: forgejo-registry
