@@ -10,6 +10,12 @@ spec:
       selector:
         matchLabels:
           app: uclab
+    - group: ""
+      version: v1
+      resource: pods
+      selector:
+        matchLabels:
+          app: uclab
   images:
     - glob: "forgejo.uclab.dev/affragak/uclab**"
   authorities:
