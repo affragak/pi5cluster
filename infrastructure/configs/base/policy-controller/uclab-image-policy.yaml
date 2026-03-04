@@ -4,9 +4,10 @@ metadata:
   name: uclab-image-policy
 spec:
   match:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: uclab
+    - cluster:
+        selector:
+          matchLabels:
+            app: uclab
     # - group: apps
     #   version: v1
     #   resource: deployments
