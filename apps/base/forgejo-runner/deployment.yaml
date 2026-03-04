@@ -90,8 +90,9 @@ spec:
       securityContext:
         fsGroup: 1000
       volumes:
-        - emptyDir: {}
-          name: runner-data
+        - name: runner-data
+          persistentVolumeClaim:
+            claimName: forgejo-runner-data-pvc
         - name: docker-storage
           persistentVolumeClaim:
             claimName: forgejo-runner-docker-cache
