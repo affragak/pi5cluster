@@ -16,4 +16,4 @@ spec:
     - name: allow-all
       static:
         action: pass
-  mode: enforce
+  mode: warn
