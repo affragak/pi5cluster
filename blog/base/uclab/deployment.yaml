@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: uclab
   namespace: uclab
+  labels:
+    app: uclab
 spec:
   replicas: 1
   selector:
