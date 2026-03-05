@@ -15,6 +15,8 @@ sops = "latest"
 vault = "latest"
 yq = "latest"
 
+[settings]
+experimental = true
 
 [hooks]
 enter = "bash ./.devcontainer/scripts/setup_project"
