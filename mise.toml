@@ -9,6 +9,12 @@ helm = "latest"
 k9s = "latest"
 kubectl = "1.32.1"
 kubens = "latest"
+pre-commit = "latest"
+python = "3.13.9"
 sops = "latest"
 vault = "latest"
 yq = "latest"
+
+
+[hooks]
+enter = "bash ./.devcontainer/scripts/setup_project"
