@@ -3,8 +3,6 @@ kind: CiliumL2AnnouncementPolicy
 metadata:
   name: l2-announcement-policy
 spec:
-  interfaces:
-    - ^eno.*$
   externalIPs: true
   loadBalancerIPs: true
   nodeSelector:
