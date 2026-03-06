@@ -24,7 +24,7 @@ patches:
       spec:
         configuration:
           destinationPath: "s3://backups-staging/"
-          retentionPolicy: 3d
+        retentionPolicy: 3d
     target:
       kind: ObjectStore
       name: forgejo-objectstore
