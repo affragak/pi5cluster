@@ -4,9 +4,9 @@ resources:
   - cilium
   - eso
   - cert-manager
-  # - external-dns
+  - longhorn
   - cloudnativepg
-  - synology-csi
+  # - synology-csi
   # - renovate
   # - botkube
   # - vault
