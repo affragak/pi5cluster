@@ -5,7 +5,7 @@ resources:
   - eso
   # - cert-manager
   # - external-dns
-  # - cloudnativepg
+  - cloudnativepg
   # - synology-csi
   # - renovate
   # - botkube
