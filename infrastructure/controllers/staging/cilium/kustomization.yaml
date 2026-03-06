@@ -4,8 +4,11 @@ namespace: kube-system
 resources:
   - ../../base/cilium/
 
-patches:
-  - path: values.yaml
-    target:
-      kind: HelmRelease
-      name: cilium
+configMapGenerator:
+  - name: cilium-values
+    behavior: replace
+    files:
+      - values.yaml=values.yaml
+
+configurations:
+  - ../../base/cilium/kustomizeconfig.yaml
