@@ -4,7 +4,7 @@ metadata:
   name: forgejo
   namespace: forgejo
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging # Specify the name of your issuer resource
+    cert-manager.io/cluster-issuer: letsencrypt-production # Specify the name of your issuer resource
 spec:
   gatewayClassName: cilium
   listeners:
