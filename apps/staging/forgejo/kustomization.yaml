@@ -2,22 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: forgejo
 resources:
-  - ../../base/forgejo/
+  - secret.yaml
+  - configmap.yaml
+  - storage-config.yaml
+  - storage-data.yaml
+  - deployment.yaml
+  - service-http.yaml
+  - service-ssh.yaml
   - gateway.yaml
   - httproute.yaml
   - certificate.yaml
-
-patches:
-  - patch: |
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: forgejo-config
-        namespace: forgejo
-      data:
-        FORGEJO__server__DOMAIN: forgejo.uclab8.net
-        FORGEJO__server__ROOT_URL: https://forgejo.uclab8.net/
-        FORGEJO__server__SSH_DOMAIN: git.uclab8.net
-    target:
-      kind: ConfigMap
-      name: forgejo-config
