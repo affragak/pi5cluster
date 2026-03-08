@@ -1,35 +1,35 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: forgejo-db
+  name: forgejo-db-v1
 spec:
   instances: 2
 
+  # bootstrap:
+  #   initdb:
+  #     database: forgejodb
+  #     owner: forgejo
+  #     secret:
+  #       name: forgejo-db-credentials
+
   bootstrap:
-    initdb:
+    recovery:
       database: forgejodb
       owner: forgejo
+      source: source
       secret:
         name: forgejo-db-credentials
 
-  # bootstrap:
-  #   recovery:
-  #     database: app
-  #     owner: app
-  #     source: source
-  #     secret:
-  #       name: customer1-db-credentials
-  #
-  # externalClusters:
-  #   - name: source
-  #     plugin:
-  #       name: barman-cloud.cloudnative-pg.io
-  #       parameters:
-  #         barmanObjectName: customer1-objectstore
-  #         serverName: customer1-db
+  externalClusters:
+    - name: source
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: forgejo-objectstore
+          serverName: forgejo-db
 
   storage:
-    size: 1Gi
+    size: 6Gi
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
