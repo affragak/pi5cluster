@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: markitdown-svc
+  namespace: markitdown
+spec:
+  selector:
+    app: markitdown-svc
+  ports:
+    - port: 8088
+  type: ClusterIP
