@@ -16,3 +16,4 @@ resources:
   - umami
   - ticktock
   - markitdown
+  - meilisearch
