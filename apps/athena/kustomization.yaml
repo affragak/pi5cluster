@@ -17,3 +17,4 @@ resources:
   - ticktock
   - markitdown
   - meilisearch
+  - view-counter

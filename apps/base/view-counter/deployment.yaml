@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: view-counter
+  namespace: view-counter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: view-counter
+  template:
+    metadata:
+      labels:
+        app: view-counter
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: view-counter
+          image: forgejo.uclab.dev/affragak/view-counter:7165df5
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          ports:
+            - containerPort: 9313
+          env:
+            - name: DB_HOST
+              value: "view-counter-db-rw.view-counter.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "viewcounter"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: view-counter-db-credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: view-counter-db-credentials
+                  key: password
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9313
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9313
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      # imagePullSecrets:
+      #   - name: forgejo-registry
