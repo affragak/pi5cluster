@@ -1,0 +1,40 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: view-counter-db
+spec:
+  instances: 2
+
+  bootstrap:
+    initdb:
+      database: view-counter
+      owner: view-counter
+      secret:
+        name: view-counter-db-creds
+
+  # bootstrap:
+  #   recovery:
+  #     database: app
+  #     owner: app
+  #     source: source
+  #     secret:
+  #       name: view-counter-db-credentials
+  #
+  # externalClusters:
+  #   - name: source
+  #     plugin:
+  #       name: barman-cloud.cloudnative-pg.io
+  #       parameters:
+  #         barmanObjectName: view-counter-objectstore
+  #         serverName: view-counter-db-v1
+
+  storage:
+    size: 5Gi
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: view-counter-objectstore
+  monitoring:
+    enablePodMonitor: true

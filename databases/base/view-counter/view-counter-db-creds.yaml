@@ -1,0 +1,24 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: view-counter-db-creds
+  namespace: view-counter
+spec:
+  refreshInterval: "15s"
+  secretStoreRef:
+    name: vault-backend-global
+    kind: ClusterSecretStore
+  target:
+    name: view-counter-db-creds
+    creationPolicy: Owner
+    template:
+      type: kubernetes.io/basic-auth
+  data:
+    - secretKey: username
+      remoteRef:
+        key: view-counter-db-creds
+        property: username
+    - secretKey: password
+      remoteRef:
+        key: view-counter-db-creds
+        property: password
