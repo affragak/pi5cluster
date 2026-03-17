@@ -1,0 +1,13 @@
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: viewcounter-image-policy
+spec:
+  images:
+    - glob: "forgejo.uclab.dev/affragak/view-counter**"
+  authorities:
+    - name: uclab
+      key:
+        secretRef:
+          name: cosign-pub-key
+          namespace: cosign-system
