@@ -30,23 +30,11 @@ spec:
               drop: [ALL]
           ports:
             - containerPort: 9313
-          env:
-            - name: DB_HOST
-              value: "view-counter-db-rw.view-counter.svc.cluster.local"
-            - name: DB_PORT
-              value: "5432"
-            - name: DB_NAME
-              value: "viewcounter"
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: view-counter-db-creds
-                  key: username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: view-counter-db-creds
-                  key: password
+          envFrom:
+            - configMapRef:
+                name: viewcounter-configmap
+            - secretRef:
+                name: view-counter-container-env
           resources:
             requests:
               cpu: 20m
@@ -66,5 +54,3 @@ spec:
               port: 9313
             initialDelaySeconds: 5
             periodSeconds: 10
-      # imagePullSecrets:
-      #   - name: forgejo-registry
