@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: viewcounter-configmap
 data:
-  DB_DATABASE: viewcounter
+  DB_DATABASE: view-counter
   DB_PORT: "5432"
   DB_HOST: view-counter-db-rw.view-counter.svc.cluster.local
