@@ -16,5 +16,5 @@ resources:
   - umami
   - ticktock
   - markitdown
-  # - meilisearch
+  - meilisearch
   - view-counter
