@@ -18,4 +18,3 @@ spec:
         secretRef:
           name: cosign-pub-key
           namespace: cosign-system
-          dataKey: cosign.pub
