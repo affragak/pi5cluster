@@ -22,7 +22,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: view-counter
-          image: forgejo.uclab.dev/affragak/view-counter@sha256:9f86e07c0afec44f369947efedd1f56bd0f81d5a30bede0cf6a84d329501409c
+          image: forgejo.uclab.dev/affragak/view-counter@sha256:6d23efe5e4c1f8a533d112375e33ccb9b5360028313032c54d4c871099eeb02c
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
