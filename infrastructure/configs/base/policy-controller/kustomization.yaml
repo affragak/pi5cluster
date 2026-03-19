@@ -5,3 +5,4 @@ resources:
   - viewcounter-image-policy.yaml
   - servicemonitor.yaml
   - secret.yaml
+  - cloudflared-image-policy.yaml

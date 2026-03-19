@@ -1,0 +1,15 @@
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: cloudflared-image-policy
+spec:
+  match:
+    - resource: deployments
+      group: apps
+      version: v1
+  images:
+    - glob: "index.docker.io/cloudflare/cloudflared*"
+  authorities:
+    - name: allow-unsigned
+      static:
+        action: pass
