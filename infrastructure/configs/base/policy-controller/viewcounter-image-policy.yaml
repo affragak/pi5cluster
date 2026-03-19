@@ -6,6 +6,8 @@ spec:
   match:
     - resource: deployments
       group: apps
+    - resource: replicasets
+      group: apps
     - resource: pods
       version: v1
   images:
