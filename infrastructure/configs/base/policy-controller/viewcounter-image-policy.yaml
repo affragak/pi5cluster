@@ -11,7 +11,7 @@ spec:
     - resource: pods
       version: v1
   images:
-    - glob: "forgejo.uclab.dev/affragak/view-counter**"
+    - glob: "forgejo.uclab.dev/affragak/view-counter*"
   authorities:
     - name: uclab
       key:
