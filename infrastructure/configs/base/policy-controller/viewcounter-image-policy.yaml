@@ -4,11 +4,10 @@ metadata:
   name: viewcounter-image-policy
 spec:
   match:
+    - resource: deployments
+      grpup: apps
     - resource: pods
       version: v1
-      selector:
-        matchLabels:
-          app: view-counter
   images:
     - glob: "forgejo.uclab.dev/affragak/view-counter**"
   authorities:
