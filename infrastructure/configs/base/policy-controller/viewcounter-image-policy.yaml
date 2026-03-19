@@ -4,7 +4,13 @@ metadata:
   name: viewcounter-image-policy
 spec:
   images:
-    - glob: "forgejo.uclab.dev/affragak/view-counter**"
+    match:
+      - resource: pods
+        version: v1
+        selector:
+          matchLabels:
+            app: view-counter
+      - glob: "forgejo.uclab.dev/affragak/view-counter**"
   authorities:
     - name: uclab
       key:
