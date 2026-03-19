@@ -3,14 +3,14 @@ kind: ClusterImagePolicy
 metadata:
   name: viewcounter-image-policy
 spec:
+  match:
+    - resource: pods
+      version: v1
+      selector:
+        matchLabels:
+          app: view-counter
   images:
-    match:
-      - resource: pods
-        version: v1
-        selector:
-          matchLabels:
-            app: view-counter
-      - glob: "forgejo.uclab.dev/affragak/view-counter**"
+    - glob: "forgejo.uclab.dev/affragak/view-counter**"
   authorities:
     - name: uclab
       key:
