@@ -14,11 +14,11 @@ spec:
     template:
       type: kubernetes.io/basic-auth
   data:
-    - secretKey: POSTGRES_USER
+    - secretKey: username
       remoteRef:
         key: paperless-db-creds
-        property: POSTGRES_USER
-    - secretKey: POSTGRES_PASSWORD
+        property: username
+    - secretKey: password
       remoteRef:
         key: paperless-db-creds
-        property: POSTGRES_PASSWORD
+        property: password
