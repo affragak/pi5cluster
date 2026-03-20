@@ -1,0 +1,24 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: paperless-db-creds
+  namespace: paperless
+spec:
+  refreshInterval: "15s"
+  secretStoreRef:
+    name: vault-backend-global
+    kind: ClusterSecretStore
+  target:
+    name: paperless-db-creds
+    creationPolicy: Owner
+    template:
+      type: kubernetes.io/basic-auth
+  data:
+    - secretKey: POSTGRES_USER
+      remoteRef:
+        key: paperless-db-creds
+        property: POSTGRES_USER
+    - secretKey: POSTGRES_PASSWORD
+      remoteRef:
+        key: paperless-db-creds
+        property: POSTGRES_PASSWORD
