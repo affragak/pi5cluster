@@ -17,24 +17,40 @@ spec:
       labels:
         app: paperless
     spec:
-      # securityContext:
-      #   runAsNonRoot: true
-      #   runAsUser: 1000
-      #   runAsGroup: 1000
-      #   fsGroup: 1000
-      #   seccompProfile:
-      #     type: RuntimeDefault
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+      initContainers:
+        # Runs as root only to fix /run and /tmp ownership,
+        # then exits. Main container never needs root.
+        - name: fix-run-permissions
+          image: ghcr.io/paperless-ngx/paperless-ngx:latest
+          command: ["chown", "1000:1000", "/run", "/tmp"]
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: run
+              mountPath: /run
+            - name: tmp
+              mountPath: /tmp
 
       containers:
         - name: paperless
           image: ghcr.io/paperless-ngx/paperless-ngx:latest
 
-          # securityContext:
-          #   allowPrivilegeEscalation: false
-          #   readOnlyRootFilesystem: true
-          #   capabilities:
-          #     drop:
-          #       - ALL
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
 
           ports:
             - containerPort: 8000
@@ -47,6 +63,10 @@ spec:
                 name: paperless
 
           volumeMounts:
+            - name: run # writable /run for s6-overlay
+              mountPath: /run
+            - name: tmp # writable /tmp
+              mountPath: /tmp
             - name: data
               mountPath: /usr/src/paperless/data
             - name: media
@@ -77,6 +97,10 @@ spec:
               cpu: 2000m
               memory: 2Gi
       volumes:
+        - name: run
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
         - name: data
           persistentVolumeClaim:
             claimName: paperless-data
