@@ -44,7 +44,7 @@ spec:
             - secretRef:
                 name: paperless-container-env
             - secretRef:
-                name: paperless-secret-key
+                name: paperless
 
           volumeMounts:
             - name: data
