@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless
+  namespace: paperless
+  labels:
+    app: paperless
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paperless
+  strategy:
+    type: Recreate # Volumes are RWO; only one pod at a time
+  template:
+    metadata:
+      labels:
+        app: paperless
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+        - name: paperless
+          image: ghcr.io/paperless-ngx/paperless-ngx:latest
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: paperless-config
+            - secretRef:
+                name: paperless-container-env
+            - secretRef:
+                name: paperless-secret-key
+
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            - name: export
+              mountPath: /usr/src/paperless/export
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: paperless-media
+        - name: export
+          persistentVolumeClaim:
+            claimName: paperless-export
+        - name: consume
+          persistentVolumeClaim:
+            claimName: paperless-consume

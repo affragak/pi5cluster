@@ -18,3 +18,4 @@ resources:
   - markitdown
   - meilisearch
   - view-counter
+  - paperless
