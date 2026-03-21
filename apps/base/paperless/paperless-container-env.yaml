@@ -8,14 +8,14 @@ spec:
     name: vault-backend-global
     kind: ClusterSecretStore
   target:
-    name: paperless-env-container-db
+    name: paperless-container-env
     creationPolicy: Owner
   data:
     - secretKey: PAPERLESS_DBUSER
       remoteRef:
-        key: paperless-env-container-db
+        key: paperless-container-env
         property: username
     - secretKey: PAPERLESS_DBPASS
       remoteRef:
-        key: paperless-env-container-db
+        key: paperless-container-env
         property: password
