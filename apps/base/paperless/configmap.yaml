@@ -8,6 +8,6 @@ data:
   PAPERLESS_DBPORT: "5432"
   PAPERLESS_DBNAME: paperless
   PAPERLESS_REDIS: "redis://redis:6379"
-  PAPERLESS_URL: "https://paperless.example.com"
+  PAPERLESS_URL: "https://paperless.uclab.dev"
   PAPERLESS_TIME_ZONE: "Europe/Berlin"
   PAPERLESS_OCR_LANGUAGE: "deu+eng"
