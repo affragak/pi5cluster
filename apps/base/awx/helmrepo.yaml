@@ -1,4 +1,4 @@
-apiVersion: source.tool2
+apiVersion: source.toolkit.fluxcd.io/v2
 kind: HelmRepository
 metadata:
   name: awx-operator
