@@ -19,3 +19,4 @@ resources:
   - meilisearch
   - view-counter
   - paperless
+  - awx
