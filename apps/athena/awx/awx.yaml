@@ -1,0 +1,89 @@
+apiVersion: awx.ansible.com/v1beta1
+kind: AWX
+metadata:
+  name: awx
+  namespace: awx
+spec:
+  # ----------------------------------------------------------------
+  # Service & Ingress
+  # ----------------------------------------------------------------
+  service_type: ClusterIP
+
+  # TLS via cert-manager (uncomment when ready)
+  # ingress_tls_secret: awx-tls
+  # ingress_annotations:
+  #   cert-manager.io/cluster-issuer: letsencrypt-prod
+
+  # ----------------------------------------------------------------
+  # Admin credentials
+  # ----------------------------------------------------------------
+  admin_user: admin
+  # Password is auto-generated into secret: awx-admin-password
+  # To use a custom password instead, pre-create the secret:
+  #   kubectl create secret generic awx-admin-password \
+  #     --from-literal=password=MySecret -n awx
+  # Then uncomment:
+  # admin_password_secret: awx-admin-password
+
+  # ----------------------------------------------------------------
+  # Web / Task / EE resources
+  # ----------------------------------------------------------------
+  web_resource_requirements:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+  task_resource_requirements:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+  ee_resource_requirements:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  # ----------------------------------------------------------------
+  # PostgreSQL
+  # ----------------------------------------------------------------
+  postgres_resource_requirements:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  postgres_storage_requirements:
+    requests:
+      storage: 8Gi
+
+  postgres_storage_class: local-path # k3s default storage class
+
+  # ----------------------------------------------------------------
+  # Projects PVC
+  # ----------------------------------------------------------------
+  projects_persistence: true
+  projects_storage_class: local-path
+  projects_storage_size: 8Gi
+  projects_storage_access_mode: ReadWriteOnce
+
+  # ----------------------------------------------------------------
+  # Execution environment
+  # ----------------------------------------------------------------
+  control_plane_ee_image: quay.io/ansible/awx-ee:latest
+
+  # ----------------------------------------------------------------
+  # Replicas
+  # ----------------------------------------------------------------
+  web_replicas: 1
+  task_replicas: 1

@@ -1,0 +1,26 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: awx
+  namespace: awx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production # Specify the name of your issuer resource
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - hostname: awx.uclab.dev # Specify a valid domain to reach your application
+      name: awx-uclab-dev-http
+      port: 80
+      protocol: HTTP
+    - hostname: awx.uclab.dev # Specify a valid domain to reach your application
+      name: awx-uclab-dev-https
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: awx-uclab-tls # Specify the secret name to be used with your application
+      allowedRoutes:
+        namespaces:
+          from: All

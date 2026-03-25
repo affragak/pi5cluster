@@ -3,3 +3,7 @@ kind: Kustomization
 namespace: awx
 resources:
   - ../../base/awx/
+  - awx.yaml
+  - certificate.yaml
+  - gateway.yaml
+  - httproute.yaml

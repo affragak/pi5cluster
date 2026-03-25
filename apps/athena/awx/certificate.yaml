@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: awx-uclab-tls
+  namespace: awx
+spec:
+  secretName: awx-uclab-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - awx.uclab.dev
