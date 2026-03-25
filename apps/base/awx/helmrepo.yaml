@@ -4,5 +4,5 @@ metadata:
   name: awx-operator
   namespace: awx
 spec:
-  url: https://ansible-community.github.io/awx-operator-helm/
+  url: https://ansible-community.github.io/awx-operator-helm
   interval: 24h
