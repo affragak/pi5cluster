@@ -20,3 +20,4 @@ resources:
   - view-counter
   - paperless
   - awx
+  - netbox
