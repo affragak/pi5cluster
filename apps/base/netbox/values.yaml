@@ -16,6 +16,7 @@ allowedHosts:
 
 timeZone: Europe/Berlin
 loginRequired: false
+defaultLanguage: en-us
 
 persistence:
   enabled: false
