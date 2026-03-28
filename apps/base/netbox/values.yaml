@@ -1,45 +1,28 @@
-# apps/base/netbox/values.yaml
-# Chart: netbox v8.0.23 from https://charts.netbox.oss.netboxlabs.com/
-# Secrets injected via ExternalSecret (see externalsecret.yaml)
+# Chart: netbox-8.0.23  (NetBox v4.5.5)
 
-# ---------------------------------------------------------------------------
-# Superuser — password comes from the Secret below
-# ---------------------------------------------------------------------------
 superuser:
-  name: admin
-  email: admin@uclab.dev
+  name: "" # read from secret
+  email: "" # read from secret
   existingSecret: netbox-superuser-secret
-  existingSecretPasswordKey: superuserPassword
-  existingSecretApiTokenKey: superuserApiToken
+  existingSecretUsernameKey: username
+  existingSecretEmailKey: email
+  existingSecretPasswordKey: password
+  existingSecretApiTokenKey: api_token
 
-# ---------------------------------------------------------------------------
-# Django secret key — read from Secret
-# ---------------------------------------------------------------------------
+# Django secret key
 existingSecret: netbox-secret
-secretKey: secretKey
+existingSecretKey: secret_key
 
-# ---------------------------------------------------------------------------
-# NetBox config
-# ---------------------------------------------------------------------------
 allowedHosts:
   - "netbox.local"
   - "netbox"
 
 timeZone: Europe/Berlin
-dateFormat: "N j, Y"
-shortDateFormat: "Y-m-d"
-
 loginRequired: false
 
-# ---------------------------------------------------------------------------
-# Persistence — disabled (local-path is RWO; re-enable with Longhorn/NFS)
-# ---------------------------------------------------------------------------
 persistence:
-  enabled: false
+  enabled: false # local-path is RWO only; re-enable with Longhorn
 
-# ---------------------------------------------------------------------------
-# PostgreSQL (bundled Bitnami sub-chart)
-# ---------------------------------------------------------------------------
 postgresql:
   enabled: true
   auth:
@@ -47,7 +30,7 @@ postgresql:
     database: netbox
     existingSecret: netbox-postgresql-secret
     secretKeys:
-      adminPasswordKey: postgresPassword
+      adminPasswordKey: postgres-password
       userPasswordKey: password
   primary:
     persistence:
@@ -62,14 +45,11 @@ postgresql:
         cpu: 500m
         memory: 512Mi
 
-# ---------------------------------------------------------------------------
-# Redis (bundled Bitnami sub-chart)
-# ---------------------------------------------------------------------------
 redis:
   enabled: true
   auth:
     existingSecret: netbox-redis-secret
-    existingSecretPasswordKey: redisPassword
+    existingSecretPasswordKey: redis-password
   master:
     persistence:
       enabled: true
@@ -83,9 +63,6 @@ redis:
         cpu: 200m
         memory: 128Mi
 
-# ---------------------------------------------------------------------------
-# Resources (sized for Pi5)
-# ---------------------------------------------------------------------------
 resources:
   requests:
     cpu: 100m
