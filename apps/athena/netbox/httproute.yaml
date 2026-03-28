@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: netbox
+  namespace: netbox
+spec:
+  hostnames:
+    - netbox.uclab.dev # Specify a valid domain to reach your application
+  parentRefs:
+    - name: netbox
+  rules:
+    - backendRefs:
+        - name: netbox # Specify the service of the application
+          port: 80
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+status:
+  parents: []

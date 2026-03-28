@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: netbox-uclab-tls
+  namespace: netbox
+spec:
+  secretName: netbox-uclab-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - netbox.uclab.dev
