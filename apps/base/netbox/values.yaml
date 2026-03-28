@@ -11,6 +11,8 @@ existingSecretKey: secret_key
 allowedHosts:
   - "netbox.local"
   - "netbox"
+  - "localhost"
+  - "*"
 
 timeZone: Europe/Berlin
 loginRequired: false
