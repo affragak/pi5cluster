@@ -1,15 +1,10 @@
-# Chart: netbox-8.0.23  (NetBox v4.5.5)
+# Chart: netbox-8.0.23 (NetBox v4.5.5)
+# Secret key names are chart defaults — do not override existingSecretXxxKey fields
 
 superuser:
-  name: "" # read from secret
-  email: "" # read from secret
   existingSecret: netbox-superuser-secret
-  existingSecretUsernameKey: username
-  existingSecretEmailKey: email
-  existingSecretPasswordKey: password
-  existingSecretApiTokenKey: api_token
+  # chart reads: username, email, email_password, api_token from this secret
 
-# Django secret key
 existingSecret: netbox-secret
 existingSecretKey: secret_key
 
@@ -21,7 +16,7 @@ timeZone: Europe/Berlin
 loginRequired: false
 
 persistence:
-  enabled: false # local-path is RWO only; re-enable with Longhorn
+  enabled: false
 
 postgresql:
   enabled: true
