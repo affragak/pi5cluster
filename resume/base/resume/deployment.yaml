@@ -26,7 +26,7 @@ spec:
         - name: forgejo-registry
       containers:
         - name: nginx
-          image: forgejo.uclab.dev/affragak/resume:placeholder
+          image: forgejo.uclab.dev/affragak/resume@sha256:0e7e77347398760782bdff89ac54a6b0dc519b7070a81d29055b3eeb90d3bf2d
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
