@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 export KUBECONFIG=/workspaces/pi5cluster/kubeconfig
-export VAULT_ADDR='https://vault.uclab8.net:8200'
+export VAULT_ADDR='https://vault.uclab8.net'
 export VAULT_TOKEN_FILE="$HOME/.vault-token"
 
 # Function to check if Vault token is valid
