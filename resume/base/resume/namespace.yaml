@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: resume
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    policy.sigstore.dev/include: "true"
