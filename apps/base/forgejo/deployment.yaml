@@ -34,7 +34,7 @@ spec:
                 name: forgejo-config
             - secretRef:
                 name: forgejo-db-env
-          image: data.forgejo.org/forgejo/forgejo:14.0.2-rootless
+          image: data.forgejo.org/forgejo/forgejo:14.0.3-rootless
           livenessProbe:
             failureThreshold: 3
             httpGet:
