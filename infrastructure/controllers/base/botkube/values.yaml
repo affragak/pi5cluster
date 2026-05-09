@@ -566,10 +566,13 @@ communications:
             executors:
               - k8s-default-tools
             # -- Notification sources configuration for a given channel.
+            # NOTE: actual channel bindings are managed in Botkube Cloud
+            # (CONFIG_PROVIDER_ENDPOINT=https://api.botkube.io/graphql).
+            # Edits here are ignored by the running pod.
             sources:
               - k8s-err-events
               - k8s-recommendation-events
-              - prometheus
+              - botkubeExtra/prometheus
       # -- Bot token for your own app for Slack.
       # [Ref doc](https://api.slack.com/authentication/token-types).
 
