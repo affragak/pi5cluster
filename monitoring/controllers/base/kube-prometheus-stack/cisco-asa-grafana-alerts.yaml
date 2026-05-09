@@ -13,7 +13,7 @@ grafana:
               title: ASA critical / error events
               condition: B
               for: 1m
-              noDataState: NoData
+              noDataState: OK
               execErrState: Error
               isPaused: false
               data:
@@ -167,3 +167,43 @@ grafana:
               annotations:
                 summary: "Repeated auth failures on {{`{{ $labels.routerboard }}`}}"
                 description: "{{`{{ $values.B }}`}} failed-auth events in 5m — possible brute-force or misconfigured client."
+
+            # ── Rule 5: ASA interface state change (link up/down) ────
+            - uid: cisco-asa-link-state-change
+              title: ASA interface state change
+              condition: B
+              for: 0m
+              noDataState: OK
+              execErrState: Error
+              isPaused: false
+              data:
+                - refId: A
+                  relativeTimeRange: {from: 600, to: 0}
+                  datasourceUid: P8E80F9AEF21F6940
+                  model:
+                    datasource: {type: loki, uid: P8E80F9AEF21F6940}
+                    editorMode: code
+                    expr: |-
+                      sum by (routerboard) (count_over_time({vendor="cisco"} |~ "%ASA-[0-5]-411[0-9]{3}" [5m]))
+                    queryType: instant
+                    refId: A
+                - refId: B
+                  relativeTimeRange: {from: 0, to: 0}
+                  datasourceUid: __expr__
+                  model:
+                    datasource: {type: __expr__, uid: __expr__}
+                    expression: A
+                    refId: B
+                    type: threshold
+                    conditions:
+                      - evaluator: {params: [0], type: gt}
+                        operator: {type: and}
+                        query: {params: [B]}
+                        reducer: {type: last, params: []}
+                        type: query
+              labels:
+                severity: warning
+                team: network
+              annotations:
+                summary: "Interface state change on {{`{{ $labels.routerboard }}`}}"
+                description: "{{`{{ $values.B }}`}} ASA-411xxx (link/line-protocol) event(s) in the last 5m — check `show interface` on the device."
