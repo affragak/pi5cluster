@@ -1,0 +1,169 @@
+grafana:
+  alerting:
+    cisco-asa-rules.yaml:
+      apiVersion: 1
+      groups:
+        - orgId: 1
+          name: cisco-asa
+          folder: cisco-asa
+          interval: 1m
+          rules:
+            # ── Rule 1: critical / error events (severity 0-3) ────────
+            - uid: cisco-asa-critical
+              title: ASA critical / error events
+              condition: B
+              for: 1m
+              noDataState: NoData
+              execErrState: Error
+              isPaused: false
+              data:
+                - refId: A
+                  relativeTimeRange: {from: 600, to: 0}
+                  datasourceUid: P8E80F9AEF21F6940
+                  model:
+                    datasource: {type: loki, uid: P8E80F9AEF21F6940}
+                    editorMode: code
+                    expr: |-
+                      sum by (routerboard) (count_over_time({vendor="cisco"} |~ "%ASA-[0-3]-" [5m]))
+                    queryType: instant
+                    refId: A
+                - refId: B
+                  relativeTimeRange: {from: 0, to: 0}
+                  datasourceUid: __expr__
+                  model:
+                    datasource: {type: __expr__, uid: __expr__}
+                    expression: A
+                    refId: B
+                    type: threshold
+                    conditions:
+                      - evaluator: {params: [0], type: gt}
+                        operator: {type: and}
+                        query: {params: [B]}
+                        reducer: {type: last, params: []}
+                        type: query
+              labels:
+                severity: critical
+                team: network
+              annotations:
+                summary: "Critical ASA event on {{ $labels.routerboard }}"
+                description: "One or more %ASA-[0-3]-* lines in the last 5 minutes — investigate."
+
+            # ── Rule 2: ACL deny spike ────────────────────────────────
+            - uid: cisco-asa-acl-deny-spike
+              title: ASA ACL deny spike
+              condition: B
+              for: 5m
+              noDataState: OK
+              execErrState: Error
+              isPaused: false
+              data:
+                - refId: A
+                  relativeTimeRange: {from: 600, to: 0}
+                  datasourceUid: P8E80F9AEF21F6940
+                  model:
+                    datasource: {type: loki, uid: P8E80F9AEF21F6940}
+                    editorMode: code
+                    expr: |-
+                      sum by (routerboard) (count_over_time({vendor="cisco"} |= "%ASA-4-106023" [5m]))
+                    queryType: instant
+                    refId: A
+                - refId: B
+                  relativeTimeRange: {from: 0, to: 0}
+                  datasourceUid: __expr__
+                  model:
+                    datasource: {type: __expr__, uid: __expr__}
+                    expression: A
+                    refId: B
+                    type: threshold
+                    conditions:
+                      - evaluator: {params: [100], type: gt}
+                        operator: {type: and}
+                        query: {params: [B]}
+                        reducer: {type: last, params: []}
+                        type: query
+              labels:
+                severity: warning
+                team: network
+              annotations:
+                summary: "ACL deny spike on {{ $labels.routerboard }}"
+                description: "{{ $values.B }} ACL denies in the last 5m — possible scan or flood."
+
+            # ── Rule 3: threat detection (scanner) ────────────────────
+            - uid: cisco-asa-threat-detection
+              title: ASA threat detection event
+              condition: B
+              for: 1m
+              noDataState: OK
+              execErrState: Error
+              isPaused: false
+              data:
+                - refId: A
+                  relativeTimeRange: {from: 600, to: 0}
+                  datasourceUid: P8E80F9AEF21F6940
+                  model:
+                    datasource: {type: loki, uid: P8E80F9AEF21F6940}
+                    editorMode: code
+                    expr: |-
+                      sum by (routerboard) (count_over_time({vendor="cisco"} |~ "%ASA-4-7331(00|02)" [5m]))
+                    queryType: instant
+                    refId: A
+                - refId: B
+                  relativeTimeRange: {from: 0, to: 0}
+                  datasourceUid: __expr__
+                  model:
+                    datasource: {type: __expr__, uid: __expr__}
+                    expression: A
+                    refId: B
+                    type: threshold
+                    conditions:
+                      - evaluator: {params: [0], type: gt}
+                        operator: {type: and}
+                        query: {params: [B]}
+                        reducer: {type: last, params: []}
+                        type: query
+              labels:
+                severity: warning
+                team: network
+              annotations:
+                summary: "Threat detection event on {{ $labels.routerboard }}"
+                description: "ASA built-in scanner detection fired ({{ $values.B }} events in 5m)."
+
+            # ── Rule 4: repeated authentication failures ──────────────
+            - uid: cisco-asa-auth-failures
+              title: ASA repeated auth failures
+              condition: B
+              for: 5m
+              noDataState: OK
+              execErrState: Error
+              isPaused: false
+              data:
+                - refId: A
+                  relativeTimeRange: {from: 600, to: 0}
+                  datasourceUid: P8E80F9AEF21F6940
+                  model:
+                    datasource: {type: loki, uid: P8E80F9AEF21F6940}
+                    editorMode: code
+                    expr: |-
+                      sum by (routerboard) (count_over_time({vendor="cisco"} |~ "%ASA-[46]-(113015|605004|113006)" [5m]))
+                    queryType: instant
+                    refId: A
+                - refId: B
+                  relativeTimeRange: {from: 0, to: 0}
+                  datasourceUid: __expr__
+                  model:
+                    datasource: {type: __expr__, uid: __expr__}
+                    expression: A
+                    refId: B
+                    type: threshold
+                    conditions:
+                      - evaluator: {params: [5], type: gt}
+                        operator: {type: and}
+                        query: {params: [B]}
+                        reducer: {type: last, params: []}
+                        type: query
+              labels:
+                severity: warning
+                team: network
+              annotations:
+                summary: "Repeated auth failures on {{ $labels.routerboard }}"
+                description: "{{ $values.B }} failed-auth events in 5m — possible brute-force or misconfigured client."

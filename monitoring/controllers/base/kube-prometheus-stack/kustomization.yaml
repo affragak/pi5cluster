@@ -12,5 +12,12 @@ configMapGenerator:
       labels:
         app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: monitoring
+  - name: flux-cisco-asa-grafana-alerts
+    files:
+      - cisco-asa-grafana-alerts.yaml
+    options:
+      labels:
+        app.kubernetes.io/part-of: flux
+        app.kubernetes.io/component: monitoring
 configurations:
   - kustomizeconfig.yaml
