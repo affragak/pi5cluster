@@ -5,3 +5,13 @@ resources:
   - probe-cisco-routers.yaml
   - probe-cisco-asa.yaml
   - prometheusrule.yaml
+configMapGenerator:
+  - name: flux-grafana-dashboards-cisco
+    files:
+      - dashboards/cisco-snmp.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+        app.kubernetes.io/part-of: flux
+        app.kubernetes.io/component: monitoring
+        kustomize.toolkit.fluxcd.io/substitute: disabled

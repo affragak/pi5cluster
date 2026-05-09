@@ -1,0 +1,441 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Cisco routers and ASA via snmp_exporter (modules cisco / cisco_asa)",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "red", "value": null},
+            {"color": "green", "value": 1}
+          ]},
+          "unit": "none"
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "count(up{job=~\"cisco-.*\"} == 1)",
+        "refId": "A"
+      }],
+      "title": "Devices Up",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "green", "value": null},
+            {"color": "red", "value": 1}
+          ]},
+          "unit": "none"
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "count(up{job=~\"cisco-.*\"} == 0) or vector(0)",
+        "refId": "A"
+      }],
+      "title": "Devices Down",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "blue", "value": null}
+          ]},
+          "unit": "none"
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "count(ifOperStatus{job=~\"cisco-.*\", instance=~\"$instance\"} == 1)",
+        "refId": "A"
+      }],
+      "title": "Interfaces Up",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "blue", "value": null}
+          ]},
+          "unit": "none"
+        }
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "sum(cfwConnectionStatValue{cfwConnectionStatType=\"40\"})",
+        "refId": "A"
+      }],
+      "title": "ASA Active Connections",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "max": 100,
+          "min": 0,
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "green", "value": null},
+            {"color": "yellow", "value": 70},
+            {"color": "red", "value": 85}
+          ]},
+          "unit": "percent"
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "id": 5,
+      "options": {
+        "legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]},
+        "tooltip": {"mode": "multi", "sort": "desc"}
+      },
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "cpmCPUTotal5minRev{instance=~\"$instance\"}",
+        "legendFormat": "{{instance}} cpu{{cpmCPUTotalIndex}}",
+        "refId": "A"
+      }],
+      "title": "CPU 5-minute average",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "max": 1,
+          "min": 0,
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "green", "value": null},
+            {"color": "yellow", "value": 0.7},
+            {"color": "red", "value": 0.9}
+          ]},
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+      "id": 6,
+      "options": {
+        "legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]},
+        "tooltip": {"mode": "multi", "sort": "desc"}
+      },
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "ciscoMemoryPoolUsed{instance=~\"$instance\"} / (ciscoMemoryPoolUsed{instance=~\"$instance\"} + ciscoMemoryPoolFree{instance=~\"$instance\"})",
+        "legendFormat": "{{instance}} {{ciscoMemoryPoolName}}",
+        "refId": "A"
+      }],
+      "title": "Memory utilisation",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "unit": "bps"
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 12},
+      "id": 7,
+      "options": {
+        "legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]},
+        "tooltip": {"mode": "multi", "sort": "desc"}
+      },
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "rate(ifHCInOctets{instance=~\"$instance\", ifName=~\"$interface\"}[5m]) * 8",
+        "legendFormat": "{{instance}} {{ifName}}",
+        "refId": "A"
+      }],
+      "title": "Bandwidth in",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "unit": "bps"
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 12},
+      "id": 8,
+      "options": {
+        "legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]},
+        "tooltip": {"mode": "multi", "sort": "desc"}
+      },
+      "targets": [{
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "expr": "rate(ifHCOutOctets{instance=~\"$instance\", ifName=~\"$interface\"}[5m]) * 8",
+        "legendFormat": "{{instance}} {{ifName}}",
+        "refId": "A"
+      }],
+      "title": "Bandwidth out",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineWidth": 1,
+            "showPoints": "never"
+          },
+          "unit": "pps"
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 20},
+      "id": 9,
+      "options": {
+        "legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]},
+        "tooltip": {"mode": "multi", "sort": "desc"}
+      },
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "expr": "rate(ifInErrors{instance=~\"$instance\", ifName=~\"$interface\"}[5m])",
+          "legendFormat": "{{instance}} {{ifName}} in",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "expr": "rate(ifOutErrors{instance=~\"$instance\", ifName=~\"$interface\"}[5m])",
+          "legendFormat": "{{instance}} {{ifName}} out",
+          "refId": "B"
+        }
+      ],
+      "title": "Interface errors",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "custom": {"align": "left", "displayMode": "auto"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "green", "value": null}
+          ]}
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "Value #A"},
+            "properties": [
+              {"id": "displayName", "value": "Oper"},
+              {"id": "mappings", "value": [
+                {"type": "value", "options": {"1": {"text": "up", "color": "green", "index": 0}}},
+                {"type": "value", "options": {"2": {"text": "down", "color": "red", "index": 1}}},
+                {"type": "value", "options": {"3": {"text": "testing", "color": "yellow", "index": 2}}},
+                {"type": "value", "options": {"4": {"text": "unknown", "color": "orange", "index": 3}}},
+                {"type": "value", "options": {"5": {"text": "dormant", "color": "blue", "index": 4}}},
+                {"type": "value", "options": {"6": {"text": "notPresent", "color": "gray", "index": 5}}},
+                {"type": "value", "options": {"7": {"text": "lowerLayerDown", "color": "red", "index": 6}}}
+              ]}
+            ]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Value #B"},
+            "properties": [
+              {"id": "displayName", "value": "Speed"},
+              {"id": "unit", "value": "Mbits"}
+            ]
+          }
+        ]
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 20},
+      "id": 10,
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "instance", "desc": false}]
+      },
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "expr": "ifOperStatus{instance=~\"$instance\", ifName=~\"$interface\"}",
+          "format": "table",
+          "instant": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "expr": "ifHighSpeed{instance=~\"$instance\", ifName=~\"$interface\"}",
+          "format": "table",
+          "instant": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Interface status",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {"Time": true, "__name__": true, "job": true, "device_class": true, "ifAlias": true, "ifIndex": true},
+            "indexByName": {"instance": 0, "ifName": 1, "Value #A": 2, "Value #B": 3}
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": ["cisco", "snmp", "network"],
+  "templating": {
+    "list": [
+      {
+        "current": {"selected": false, "text": "Prometheus", "value": "prometheus"},
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "definition": "label_values(up{job=~\"cisco-.*\"}, instance)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Device",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {"query": "label_values(up{job=~\"cisco-.*\"}, instance)", "refId": "PrometheusVariableQueryEditor-VariableQuery"},
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+        "definition": "label_values(ifOperStatus{instance=~\"$instance\"}, ifName)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Interface",
+        "multi": true,
+        "name": "interface",
+        "options": [],
+        "query": {"query": "label_values(ifOperStatus{instance=~\"$instance\"}, ifName)", "refId": "PrometheusVariableQueryEditor-VariableQuery"},
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {"from": "now-1h", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "Cisco SNMP",
+  "uid": "cisco-snmp",
+  "version": 1,
+  "weekStart": ""
+}
