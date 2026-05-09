@@ -10,6 +10,7 @@ configMapGenerator:
     files:
       - dashboards/cisco-snmp.json
     options:
+      disableNameSuffixHash: true
       labels:
         grafana_dashboard: "1"
         app.kubernetes.io/part-of: flux
