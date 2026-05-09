@@ -74,6 +74,12 @@ data:
           target_label: 'routerboard'
         - source_labels: ['__syslog_connection_hostname']
           target_label: 'syslog_host'
+      pipeline_stages:
+        - match:
+            selector: '{job="syslog"} |~ "%[A-Z]+-[0-7]-"'
+            stages:
+              - static_labels:
+                  vendor: cisco
     - job_name: pod-logs
       kubernetes_sd_configs:
         - role: pod
