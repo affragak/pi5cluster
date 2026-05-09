@@ -373,6 +373,186 @@
         }
       ],
       "type": "table"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 28},
+      "id": 100,
+      "panels": [
+        {
+          "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]},
+              "unit": "none"
+            }
+          },
+          "gridPos": {"h": 4, "w": 8, "x": 0, "y": 29},
+          "id": 101,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+            "expr": "sum(count_over_time({syslog_host=~\"$device\"} [$__range]))",
+            "refId": "A"
+          }],
+          "title": "Total log lines",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "thresholds": {"mode": "absolute", "steps": [
+                {"color": "green", "value": null},
+                {"color": "red", "value": 1}
+              ]},
+              "unit": "none"
+            }
+          },
+          "gridPos": {"h": 4, "w": 8, "x": 8, "y": 29},
+          "id": 102,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+            "expr": "sum(count_over_time({syslog_host=~\"$device\"} |~ \"%[A-Z]+-[0-3]-\" [$__range]))",
+            "refId": "A"
+          }],
+          "title": "Errors (severity ≤ 3)",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "thresholds": {"mode": "absolute", "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 100}
+              ]},
+              "unit": "none"
+            }
+          },
+          "gridPos": {"h": 4, "w": 8, "x": 16, "y": 29},
+          "id": 103,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+            "expr": "sum(count_over_time({syslog_host=~\"$device\"} |= \"%ASA-4-106023\" [$__range]))",
+            "refId": "A"
+          }],
+          "title": "ASA ACL denies",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {"drawStyle": "line", "fillOpacity": 10, "lineWidth": 1, "showPoints": "never"},
+              "unit": "logs/s"
+            }
+          },
+          "gridPos": {"h": 6, "w": 24, "x": 0, "y": 33},
+          "id": 104,
+          "options": {
+            "legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]},
+            "tooltip": {"mode": "multi", "sort": "desc"}
+          },
+          "targets": [{
+            "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+            "expr": "sum by (syslog_host) (rate({syslog_host=~\"$device\"}[$__interval]))",
+            "legendFormat": "{{syslog_host}}",
+            "refId": "A"
+          }],
+          "title": "Log rate per device",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+          "gridPos": {"h": 10, "w": 24, "x": 0, "y": 39},
+          "id": 105,
+          "options": {
+            "showTime": true,
+            "showLabels": false,
+            "showCommonLabels": false,
+            "wrapLogMessage": true,
+            "prettifyLogMessage": false,
+            "enableLogDetails": true,
+            "dedupStrategy": "none",
+            "sortOrder": "Descending"
+          },
+          "targets": [{
+            "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+            "expr": "{syslog_host=~\"$device\"}",
+            "refId": "A"
+          }],
+          "title": "All logs",
+          "type": "logs"
+        },
+        {
+          "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+          "gridPos": {"h": 10, "w": 24, "x": 0, "y": 49},
+          "id": 106,
+          "options": {
+            "showTime": true,
+            "showLabels": false,
+            "showCommonLabels": false,
+            "wrapLogMessage": true,
+            "prettifyLogMessage": false,
+            "enableLogDetails": true,
+            "dedupStrategy": "none",
+            "sortOrder": "Descending"
+          },
+          "targets": [{
+            "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+            "expr": "{syslog_host=~\"$device\"} |~ \"%[A-Z]+-[0-3]-\"",
+            "refId": "A"
+          }],
+          "title": "Errors and critical events",
+          "type": "logs"
+        },
+        {
+          "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+          "gridPos": {"h": 10, "w": 24, "x": 0, "y": 59},
+          "id": 107,
+          "options": {
+            "showTime": true,
+            "showLabels": false,
+            "showCommonLabels": false,
+            "wrapLogMessage": true,
+            "prettifyLogMessage": false,
+            "enableLogDetails": true,
+            "dedupStrategy": "none",
+            "sortOrder": "Descending"
+          },
+          "targets": [{
+            "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+            "expr": "{syslog_host=~\"$device\"} |= \"$search\"",
+            "refId": "A"
+          }],
+          "title": "Search (use $search variable)",
+          "type": "logs"
+        }
+      ],
+      "title": "Cisco Device Logs",
+      "type": "row"
     }
   ],
   "refresh": "30s",
@@ -428,6 +608,54 @@
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
+      },
+      {
+        "current": {"selected": false, "text": "Loki", "value": "loki"},
+        "hide": 0,
+        "includeAll": false,
+        "label": "Loki Datasource",
+        "multi": false,
+        "name": "DS_LOKI",
+        "options": [],
+        "query": "loki",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "loki", "uid": "${DS_LOKI}"},
+        "definition": "label_values({syslog_host!=\"\"}, syslog_host)",
+        "allValue": ".+",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Loki Device",
+        "multi": true,
+        "name": "device",
+        "options": [],
+        "query": {
+          "label": "syslog_host",
+          "refId": "LokiVariableQueryEditor-VariableQuery",
+          "stream": "{syslog_host!=\"\"}",
+          "type": 1
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {"selected": false, "text": "", "value": ""},
+        "hide": 0,
+        "label": "Search",
+        "name": "search",
+        "options": [{"selected": true, "text": "", "value": ""}],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
       }
     ]
   },
