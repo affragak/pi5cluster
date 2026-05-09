@@ -64,6 +64,9 @@ spec:
       plugins:
         - yesoreyeram-infinity-datasource
       adminPassword: grafana123
+      # PVC is ReadWriteOnce, so use Recreate to release the volume on rollout
+      deploymentStrategy:
+        type: Recreate
       persistence:
         enabled: true
         type: pvc
