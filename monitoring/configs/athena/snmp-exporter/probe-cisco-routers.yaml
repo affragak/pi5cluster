@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: cisco-routers-snmp
+spec:
+  jobName: cisco-routers
+  module: cisco
+  interval: 60s
+  scrapeTimeout: 30s
+  prober:
+    url: snmp-exporter.monitoring.svc.cluster.local:9116
+    path: /snmp
+    scheme: http
+  targets:
+    staticConfig:
+      static:
+        # Replace with actual router IPs in 10.3.19.0/24
+        - 10.3.19.11
+        - 10.3.19.12
+        - 10.3.19.13
+        - 10.3.19.14
+      labels:
+        device_class: cisco_router
+      relabelingConfigs:
+        - targetLabel: __param_auth
+          replacement: cisco_v3

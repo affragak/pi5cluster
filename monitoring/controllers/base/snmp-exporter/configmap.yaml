@@ -1,0 +1,352 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: snmp-exporter-config
+data:
+  snmp.yml: |
+    auths:
+      cisco_v3:
+        security_level: authPriv
+        username: ${SNMP_USERNAME}
+        password: ${SNMP_AUTH_PASSWORD}
+        auth_protocol: SHA
+        priv_protocol: AES
+        priv_password: ${SNMP_PRIV_PASSWORD}
+        version: 3
+
+    modules:
+      # Standard interface counters — works on routers, switches, ASA
+      if_mib:
+        walk:
+          - 1.3.6.1.2.1.1.3
+          - 1.3.6.1.2.1.1.5
+          - 1.3.6.1.2.1.2.2.1
+          - 1.3.6.1.2.1.31.1.1.1
+        metrics:
+          - name: sysUpTime
+            oid: 1.3.6.1.2.1.1.3
+            type: gauge
+            help: System uptime in hundredths of a second
+          - name: sysName
+            oid: 1.3.6.1.2.1.1.5
+            type: DisplayString
+            help: Administratively-assigned system name
+          - name: ifIndex
+            oid: 1.3.6.1.2.1.2.2.1.1
+            type: gauge
+            help: Unique interface index
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifAdminStatus
+            oid: 1.3.6.1.2.1.2.2.1.7
+            type: gauge
+            help: 1=up, 2=down, 3=testing
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifOperStatus
+            oid: 1.3.6.1.2.1.2.2.1.8
+            type: gauge
+            help: 1=up, 2=down, 3=testing, 4=unknown, 5=dormant, 6=notPresent, 7=lowerLayerDown
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifInErrors
+            oid: 1.3.6.1.2.1.2.2.1.14
+            type: counter
+            help: Inbound packet errors
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifOutErrors
+            oid: 1.3.6.1.2.1.2.2.1.20
+            type: counter
+            help: Outbound packet errors
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifName
+            oid: 1.3.6.1.2.1.31.1.1.1.1
+            type: DisplayString
+            help: Interface name
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHCInOctets
+            oid: 1.3.6.1.2.1.31.1.1.1.6
+            type: counter
+            help: 64-bit total octets received
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHCOutOctets
+            oid: 1.3.6.1.2.1.31.1.1.1.10
+            type: counter
+            help: 64-bit total octets transmitted
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHighSpeed
+            oid: 1.3.6.1.2.1.31.1.1.1.15
+            type: gauge
+            help: Interface bandwidth in Mbps
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifAlias
+            oid: 1.3.6.1.2.1.31.1.1.1.18
+            type: DisplayString
+            help: Interface description / alias
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+        lookups:
+          - source_indexes: [ifIndex]
+            lookup: 1.3.6.1.2.1.31.1.1.1.1
+          - source_indexes: [ifIndex]
+            lookup: 1.3.6.1.2.1.31.1.1.1.18
+
+      # Cisco IOS / IOS-XE — adds CPU and memory
+      cisco:
+        walk:
+          - 1.3.6.1.2.1.1.3
+          - 1.3.6.1.2.1.1.5
+          - 1.3.6.1.2.1.2.2.1
+          - 1.3.6.1.2.1.31.1.1.1
+          - 1.3.6.1.4.1.9.9.109.1.1.1.1.7
+          - 1.3.6.1.4.1.9.9.48.1.1.1
+        metrics:
+          - name: sysUpTime
+            oid: 1.3.6.1.2.1.1.3
+            type: gauge
+            help: System uptime in hundredths of a second
+          - name: sysName
+            oid: 1.3.6.1.2.1.1.5
+            type: DisplayString
+            help: System name
+          - name: ifIndex
+            oid: 1.3.6.1.2.1.2.2.1.1
+            type: gauge
+            help: Interface index
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifAdminStatus
+            oid: 1.3.6.1.2.1.2.2.1.7
+            type: gauge
+            help: Interface admin status
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifOperStatus
+            oid: 1.3.6.1.2.1.2.2.1.8
+            type: gauge
+            help: Interface operational status
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifInErrors
+            oid: 1.3.6.1.2.1.2.2.1.14
+            type: counter
+            help: Inbound errors
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifOutErrors
+            oid: 1.3.6.1.2.1.2.2.1.20
+            type: counter
+            help: Outbound errors
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifName
+            oid: 1.3.6.1.2.1.31.1.1.1.1
+            type: DisplayString
+            help: Interface name
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHCInOctets
+            oid: 1.3.6.1.2.1.31.1.1.1.6
+            type: counter
+            help: 64-bit input octets
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHCOutOctets
+            oid: 1.3.6.1.2.1.31.1.1.1.10
+            type: counter
+            help: 64-bit output octets
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHighSpeed
+            oid: 1.3.6.1.2.1.31.1.1.1.15
+            type: gauge
+            help: Interface bandwidth in Mbps
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifAlias
+            oid: 1.3.6.1.2.1.31.1.1.1.18
+            type: DisplayString
+            help: Interface alias
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: cpmCPUTotal5minRev
+            oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.7
+            type: gauge
+            help: 5-minute CPU utilisation percent
+            indexes:
+              - labelname: cpmCPUTotalIndex
+                type: gauge
+          - name: ciscoMemoryPoolName
+            oid: 1.3.6.1.4.1.9.9.48.1.1.1.2
+            type: DisplayString
+            help: Cisco memory pool name
+            indexes:
+              - labelname: ciscoMemoryPoolType
+                type: gauge
+          - name: ciscoMemoryPoolUsed
+            oid: 1.3.6.1.4.1.9.9.48.1.1.1.5
+            type: gauge
+            help: Memory pool bytes used
+            indexes:
+              - labelname: ciscoMemoryPoolType
+                type: gauge
+          - name: ciscoMemoryPoolFree
+            oid: 1.3.6.1.4.1.9.9.48.1.1.1.6
+            type: gauge
+            help: Memory pool bytes free
+            indexes:
+              - labelname: ciscoMemoryPoolType
+                type: gauge
+        lookups:
+          - source_indexes: [ifIndex]
+            lookup: 1.3.6.1.2.1.31.1.1.1.1
+          - source_indexes: [ifIndex]
+            lookup: 1.3.6.1.2.1.31.1.1.1.18
+          - source_indexes: [ciscoMemoryPoolType]
+            lookup: 1.3.6.1.4.1.9.9.48.1.1.1.2
+
+      # Cisco ASA — adds firewall connection count
+      cisco_asa:
+        walk:
+          - 1.3.6.1.2.1.1.3
+          - 1.3.6.1.2.1.1.5
+          - 1.3.6.1.2.1.2.2.1
+          - 1.3.6.1.2.1.31.1.1.1
+          - 1.3.6.1.4.1.9.9.109.1.1.1.1.7
+          - 1.3.6.1.4.1.9.9.48.1.1.1
+          - 1.3.6.1.4.1.9.9.147.1.2.2.2.1.5
+        metrics:
+          - name: sysUpTime
+            oid: 1.3.6.1.2.1.1.3
+            type: gauge
+            help: System uptime
+          - name: sysName
+            oid: 1.3.6.1.2.1.1.5
+            type: DisplayString
+            help: System name
+          - name: ifIndex
+            oid: 1.3.6.1.2.1.2.2.1.1
+            type: gauge
+            help: Interface index
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifAdminStatus
+            oid: 1.3.6.1.2.1.2.2.1.7
+            type: gauge
+            help: Interface admin status
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifOperStatus
+            oid: 1.3.6.1.2.1.2.2.1.8
+            type: gauge
+            help: Interface operational status
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifName
+            oid: 1.3.6.1.2.1.31.1.1.1.1
+            type: DisplayString
+            help: Interface name
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHCInOctets
+            oid: 1.3.6.1.2.1.31.1.1.1.6
+            type: counter
+            help: 64-bit input octets
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHCOutOctets
+            oid: 1.3.6.1.2.1.31.1.1.1.10
+            type: counter
+            help: 64-bit output octets
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifHighSpeed
+            oid: 1.3.6.1.2.1.31.1.1.1.15
+            type: gauge
+            help: Interface bandwidth in Mbps
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: ifAlias
+            oid: 1.3.6.1.2.1.31.1.1.1.18
+            type: DisplayString
+            help: Interface alias
+            indexes:
+              - labelname: ifIndex
+                type: gauge
+          - name: cpmCPUTotal5minRev
+            oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.7
+            type: gauge
+            help: 5-minute CPU utilisation
+            indexes:
+              - labelname: cpmCPUTotalIndex
+                type: gauge
+          - name: ciscoMemoryPoolName
+            oid: 1.3.6.1.4.1.9.9.48.1.1.1.2
+            type: DisplayString
+            help: Memory pool name
+            indexes:
+              - labelname: ciscoMemoryPoolType
+                type: gauge
+          - name: ciscoMemoryPoolUsed
+            oid: 1.3.6.1.4.1.9.9.48.1.1.1.5
+            type: gauge
+            help: Memory pool used
+            indexes:
+              - labelname: ciscoMemoryPoolType
+                type: gauge
+          - name: ciscoMemoryPoolFree
+            oid: 1.3.6.1.4.1.9.9.48.1.1.1.6
+            type: gauge
+            help: Memory pool free
+            indexes:
+              - labelname: ciscoMemoryPoolType
+                type: gauge
+          - name: cfwConnectionStatValue
+            oid: 1.3.6.1.4.1.9.9.147.1.2.2.2.1.5
+            type: gauge
+            help: ASA active connections (cfwConnectionStatType=connectionInUse=40)
+            indexes:
+              - labelname: cfwConnectionStatService
+                type: gauge
+              - labelname: cfwConnectionStatType
+                type: gauge
+        lookups:
+          - source_indexes: [ifIndex]
+            lookup: 1.3.6.1.2.1.31.1.1.1.1
+          - source_indexes: [ifIndex]
+            lookup: 1.3.6.1.2.1.31.1.1.1.18
+          - source_indexes: [ciscoMemoryPoolType]
+            lookup: 1.3.6.1.4.1.9.9.48.1.1.1.2

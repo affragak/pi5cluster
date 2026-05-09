@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snmp-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snmp-exporter
+  template:
+    metadata:
+      labels:
+        app: snmp-exporter
+    spec:
+      initContainers:
+        - name: render-config
+          image: alpine:3.20
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              apk add --no-cache gettext >/dev/null
+              envsubst < /template/snmp.yml > /config/snmp.yml
+          env:
+            - name: SNMP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: snmp-cisco-credentials
+                  key: username
+            - name: SNMP_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: snmp-cisco-credentials
+                  key: auth_password
+            - name: SNMP_PRIV_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: snmp-cisco-credentials
+                  key: priv_password
+          volumeMounts:
+            - name: template
+              mountPath: /template
+            - name: config
+              mountPath: /config
+      containers:
+        - name: snmp-exporter
+          image: quay.io/prometheus/snmp-exporter:v0.26.0
+          args:
+            - --config.file=/config/snmp.yml
+          ports:
+            - name: http
+              containerPort: 9116
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+      volumes:
+        - name: template
+          configMap:
+            name: snmp-exporter-config
+        - name: config
+          emptyDir: {}

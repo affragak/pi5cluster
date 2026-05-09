@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cisco-snmp-alerts
+spec:
+  groups:
+    - name: cisco-snmp.rules
+      rules:
+        - alert: CiscoDeviceUnreachable
+          annotations:
+            summary: SNMP scrape failing for {{ $labels.instance }}
+            description: snmp_exporter has been unable to reach {{ $labels.instance }} ({{ $labels.job }}) for more than 3 minutes.
+          expr: up{job=~"cisco-.*"} == 0
+          for: 3m
+          labels:
+            severity: critical
+
+        - alert: CiscoInterfaceDown
+          annotations:
+            summary: Interface {{ $labels.ifName }} on {{ $labels.instance }} is down
+            description: ifOperStatus on {{ $labels.instance }} interface {{ $labels.ifName }} is not "up" while it is administratively up.
+          expr: ifOperStatus{job=~"cisco-.*"} != 1 and ifAdminStatus{job=~"cisco-.*"} == 1
+          for: 2m
+          labels:
+            severity: warning
+
+        - alert: CiscoHighCPU
+          annotations:
+            summary: High CPU on {{ $labels.instance }}
+            description: 5-minute CPU on {{ $labels.instance }} is {{ $value }}%.
+          expr: cpmCPUTotal5minRev{job=~"cisco-.*"} > 80
+          for: 5m
+          labels:
+            severity: warning
+
+        - alert: CiscoHighMemory
+          annotations:
+            summary: High memory on {{ $labels.instance }} ({{ $labels.ciscoMemoryPoolName }})
+            description: Memory pool {{ $labels.ciscoMemoryPoolName }} on {{ $labels.instance }} is {{ $value | humanizePercentage }} used.
+          expr: |
+            ciscoMemoryPoolUsed{job=~"cisco-.*"}
+              / (ciscoMemoryPoolUsed{job=~"cisco-.*"} + ciscoMemoryPoolFree{job=~"cisco-.*"})
+              > 0.9
+          for: 5m
+          labels:
+            severity: warning
+
+        - alert: CiscoInterfaceErrors
+          annotations:
+            summary: Errors on {{ $labels.ifName }} ({{ $labels.instance }})
+            description: Interface {{ $labels.ifName }} on {{ $labels.instance }} has {{ $value | humanize }} errors/sec over the last 5m.
+          expr: rate(ifInErrors{job=~"cisco-.*"}[5m]) + rate(ifOutErrors{job=~"cisco-.*"}[5m]) > 1
+          for: 10m
+          labels:
+            severity: warning

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: snmp-exporter
+  labels:
+    app: snmp-exporter
+spec:
+  selector:
+    app: snmp-exporter
+  ports:
+    - name: http
+      port: 9116
+      targetPort: http

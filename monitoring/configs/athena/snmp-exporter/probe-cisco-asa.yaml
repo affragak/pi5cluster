@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: cisco-asa-snmp
+spec:
+  jobName: cisco-asa
+  module: cisco_asa
+  interval: 60s
+  scrapeTimeout: 30s
+  prober:
+    url: snmp-exporter.monitoring.svc.cluster.local:9116
+    path: /snmp
+    scheme: http
+  targets:
+    staticConfig:
+      static:
+        # Replace with actual ASA IP(s) in 10.3.19.0/24
+        - 10.3.19.10
+      labels:
+        device_class: cisco_asa
+      relabelingConfigs:
+        - targetLabel: __param_auth
+          replacement: cisco_v3
