@@ -9,8 +9,10 @@ grafana:
           interval: 1m
           rules:
             # ── Rule 1: critical / error events (severity 0-3) ────────
-            # Each unique %ASA-X-NNNNNN code per device is its own alert
-            # instance. asa_code is extracted via the regexp parser.
+            # Per-event alerting: regexp extracts both the asa_code AND
+            # the message body, group includes msg so each unique
+            # critical line fires with full context (e.g. BGP neighbor
+            # 192.1.20.2 Down ...).
             - uid: cisco-asa-critical
               title: ASA critical / error events
               condition: B
@@ -26,11 +28,11 @@ grafana:
                     datasource: {type: loki, uid: P8E80F9AEF21F6940}
                     editorMode: code
                     expr: |-
-                      sum by (routerboard, asa_code) (
+                      sum by (routerboard, asa_code, msg) (
                         count_over_time(
                           {vendor="cisco"}
                             |~ "%ASA-[0-3]-"
-                            | regexp `%ASA-[0-3]-(?P<asa_code>\d+):`
+                            | regexp `%ASA-[0-3]-(?P<asa_code>\d+):\s*(?P<msg>.*)`
                             [5m]
                         )
                       )
@@ -54,15 +56,20 @@ grafana:
                 severity: critical
                 team: network
               annotations:
-                summary: "%ASA-{{`{{ $labels.asa_code }}`}} on {{`{{ $labels.routerboard }}`}} (x{{`{{ $values.A.Value }}`}} in 5m)"
+                summary: "%ASA-{{`{{ $labels.asa_code }}`}} on {{`{{ $labels.routerboard }}`}}: {{`{{ $labels.msg }}`}}"
                 description: |-
-                  {{`{{ $values.A.Value }}`}} occurrence(s) of %ASA-X-{{`{{ $labels.asa_code }}`}} (severity 0-3 = emergency / alert / critical / error) on {{`{{ $labels.routerboard }}`}} in the last 5 minutes.
+                  {{`{{ $labels.routerboard }}`}}: %ASA-X-{{`{{ $labels.asa_code }}`}} fired {{`{{ $values.A.Value }}`}}× in 5m (severity 0-3 = emergency / alert / critical / error).
+
+                  Message:
+                  {{`{{ $labels.msg }}`}}
+
                   Inspect in Grafana → Explore → Loki:
                   {vendor="cisco", routerboard="{{`{{ $labels.routerboard }}`}}"} |~ "%ASA-[0-3]-{{`{{ $labels.asa_code }}`}}"
 
-            # ── Rule 2: ACL deny spike ────────────────────────────────
-            # Covers %ASA-X-106xxx (interface ACL family) and 710003
-            # (control-plane denies).
+            # ── Rule 2: ACL deny spike (volume detection) ─────────────
+            # Stays aggregated by (routerboard, asa_code) — including msg
+            # would split the count across every (src,dst) tuple and
+            # break threshold semantics for spike detection.
             - uid: cisco-asa-acl-deny-spike
               title: ASA ACL deny spike
               condition: B
@@ -109,7 +116,8 @@ grafana:
                 summary: "ACL deny spike (%ASA-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}} (x{{`{{ $values.A.Value }}`}} in 5m)"
                 description: |-
                   {{`{{ $values.A.Value }}`}} ACL/access denies (%ASA-X-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}} in 5 minutes — possible scan or flood.
-                  Inspect in Grafana → Explore → Loki:
+
+                  Inspect (sample of denied traffic, src/dst tuples):
                   {vendor="cisco", routerboard="{{`{{ $labels.routerboard }}`}}"} |~ "%ASA-X-{{`{{ $labels.asa_code }}`}}"
 
             # ── Rule 3: threat detection (scanner) ────────────────────
@@ -128,11 +136,11 @@ grafana:
                     datasource: {type: loki, uid: P8E80F9AEF21F6940}
                     editorMode: code
                     expr: |-
-                      sum by (routerboard, asa_code) (
+                      sum by (routerboard, asa_code, msg) (
                         count_over_time(
                           {vendor="cisco"}
                             |~ "%ASA-4-7331(00|02)"
-                            | regexp `%ASA-4-(?P<asa_code>7331(?:00|02)):`
+                            | regexp `%ASA-4-(?P<asa_code>7331(?:00|02)):\s*(?P<msg>.*)`
                             [5m]
                         )
                       )
@@ -156,13 +164,20 @@ grafana:
                 severity: warning
                 team: network
               annotations:
-                summary: "Threat detection (%ASA-4-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}} (x{{`{{ $values.A.Value }}`}} in 5m)"
+                summary: "Threat detection (%ASA-4-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}}: {{`{{ $labels.msg }}`}}"
                 description: |-
-                  ASA built-in scanner detection fired: %ASA-4-{{`{{ $labels.asa_code }}`}} ({{`{{ $values.A.Value }}`}} events in 5m on {{`{{ $labels.routerboard }}`}}).
+                  {{`{{ $labels.routerboard }}`}}: ASA built-in scanner detection fired %ASA-4-{{`{{ $labels.asa_code }}`}} ({{`{{ $values.A.Value }}`}}× in 5m).
+
+                  Message:
+                  {{`{{ $labels.msg }}`}}
+
                   Inspect in Grafana → Explore → Loki:
                   {vendor="cisco", routerboard="{{`{{ $labels.routerboard }}`}}"} |~ "%ASA-4-{{`{{ $labels.asa_code }}`}}"
 
             # ── Rule 4: repeated authentication failures ──────────────
+            # Stays aggregated — threshold > 5 means "5 failures in 5m"
+            # for brute-force detection. Including msg would split per
+            # (user, src) pair and never reach the threshold.
             - uid: cisco-asa-auth-failures
               title: ASA repeated auth failures
               condition: B
@@ -209,7 +224,8 @@ grafana:
                 summary: "Auth failures (%ASA-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}} (x{{`{{ $values.A.Value }}`}} in 5m)"
                 description: |-
                   {{`{{ $values.A.Value }}`}} failed-auth events (%ASA-X-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}} in 5 minutes — possible brute-force or misconfigured client.
-                  Inspect in Grafana → Explore → Loki:
+
+                  Inspect (sample of attempts, source IPs, usernames):
                   {vendor="cisco", routerboard="{{`{{ $labels.routerboard }}`}}"} |~ "%ASA-X-{{`{{ $labels.asa_code }}`}}"
 
             # ── Rule 5: ASA interface state change (link up/down) ────
@@ -228,11 +244,11 @@ grafana:
                     datasource: {type: loki, uid: P8E80F9AEF21F6940}
                     editorMode: code
                     expr: |-
-                      sum by (routerboard, asa_code) (
+                      sum by (routerboard, asa_code, msg) (
                         count_over_time(
                           {vendor="cisco"}
                             |~ "%ASA-[0-5]-411[0-9]{3}"
-                            | regexp `%ASA-[0-5]-(?P<asa_code>411\d{3}):`
+                            | regexp `%ASA-[0-5]-(?P<asa_code>411\d{3}):\s*(?P<msg>.*)`
                             [5m]
                         )
                       )
@@ -256,8 +272,12 @@ grafana:
                 severity: warning
                 team: network
               annotations:
-                summary: "Interface state change (%ASA-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}} (x{{`{{ $values.A.Value }}`}} in 5m)"
+                summary: "%ASA-{{`{{ $labels.asa_code }}`}} on {{`{{ $labels.routerboard }}`}}: {{`{{ $labels.msg }}`}}"
                 description: |-
-                  {{`{{ $values.A.Value }}`}} link/line-protocol event(s) (%ASA-X-{{`{{ $labels.asa_code }}`}}) on {{`{{ $labels.routerboard }}`}} in 5 minutes — check `show interface` on the device.
+                  {{`{{ $labels.routerboard }}`}}: link/line-protocol event %ASA-X-{{`{{ $labels.asa_code }}`}} ({{`{{ $values.A.Value }}`}}× in 5m).
+
+                  Message:
+                  {{`{{ $labels.msg }}`}}
+
                   Inspect in Grafana → Explore → Loki:
                   {vendor="cisco", routerboard="{{`{{ $labels.routerboard }}`}}"} |~ "%ASA-X-{{`{{ $labels.asa_code }}`}}"
