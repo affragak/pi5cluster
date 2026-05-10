@@ -209,17 +209,23 @@ All Loki panels filter by `{vendor="cisco", routerboard=~"$device"}` — see §1
 
 `monitoring/controllers/base/kube-prometheus-stack/cisco-asa-grafana-alerts.yaml` provides them via `grafana.alerting.<file>.yaml` Helm value. The kustomize `configMapGenerator` + `kustomizeconfig.yaml` `nameReference` rewrite means the hash-suffixed ConfigMap name is auto-substituted into the HelmRelease's `valuesFrom`.
 
-Folder: `cisco-asa`. All evaluate every 1 min. Each rule's query passes the line through `regexp` to extract an `asa_code` capture group, then groups `by (routerboard, asa_code)` — every unique error code per device fires its own alert instance.
+Folder: `cisco-asa`. All evaluate every 1 min. Each rule's query passes the line through `regexp` to extract an `asa_code` capture group, then groups `by (routerboard, asa_code, …)`.
 
-| UID | Title | Line filter | Extracted `asa_code` | Threshold | For |
+**Two grouping styles**, picked per rule based on whether the goal is per-event signal or volume detection:
+
+| UID | Title | Line filter | Group by | Threshold | For |
 |---|---|---|---|---|---|
-| `cisco-asa-critical` | ASA critical / error events | `\|~ "%ASA-[0-3]-"` | any digits after `%ASA-[0-3]-` | `>0` | 1m |
-| `cisco-asa-acl-deny-spike` | ASA ACL deny spike | `\|~ "%ASA-[0-7]-(106\|710003)"` | `106\d{3}\|710003` | `>100` | 5m |
-| `cisco-asa-threat-detection` | ASA threat detection event | `\|~ "%ASA-4-7331(00\|02)"` | `7331(00\|02)` | `>0` | 1m |
-| `cisco-asa-auth-failures` | ASA repeated auth failures | `\|~ "%ASA-[46]-(113015\|605004\|113006)"` | `113015\|605004\|113006` | `>5` | 5m |
-| `cisco-asa-link-state-change` | ASA interface state change | `\|~ "%ASA-[0-5]-411[0-9]{3}"` | `411\d{3}` | `>0` | 0m |
+| `cisco-asa-critical` | ASA critical / error events | `\|~ "%ASA-[0-3]-"` | `routerboard, asa_code, msg` | `>0` | 1m |
+| `cisco-asa-acl-deny-spike` | ASA ACL deny spike | `\|~ "%ASA-[0-7]-(106\|710003)"` | `routerboard, asa_code` | `>100` | 5m |
+| `cisco-asa-threat-detection` | ASA threat detection event | `\|~ "%ASA-4-7331(00\|02)"` | `routerboard, asa_code, msg` | `>0` | 1m |
+| `cisco-asa-auth-failures` | ASA repeated auth failures | `\|~ "%ASA-[46]-(113015\|605004\|113006)"` | `routerboard, asa_code` | `>5` | 5m |
+| `cisco-asa-link-state-change` | ASA interface state change | `\|~ "%ASA-[0-5]-411[0-9]{3}"` | `routerboard, asa_code, msg` | `>0` | 0m |
 
-All `noDataState: OK`. Labels `severity=…`, `team=network`. Annotation summary/description use `{{ $labels.asa_code }}`, `{{ $labels.routerboard }}`, and `{{ $values.A.Value }}` (the actual count — **not** `$values.B` which is the threshold-pass result `0`/`1`). Each description includes a copy-paste LogQL line for Grafana → Explore.
+**Per-event rules (1, 3, 5)** add `\| regexp \`...:\s*(?P<msg>.*)\`` to capture the message body and include `msg` in the grouping — every unique log line fires its own labelled alert with the full text. The summary becomes `%ASA-418018 on ASA-1: neighbor 192.1.20.2 Down BGP Notification sent` instead of an opaque `(x2 in 5m)` count.
+
+**Volume rules (2, 4)** stay aggregated by `(routerboard, asa_code)` only — including `msg` would split the count across every (src, dst) tuple or (user, IP) pair and break the threshold semantics that make these spike/brute-force detectors work.
+
+All rules: `noDataState: OK`. Labels `severity=…`, `team=network`. Annotation summary/description use `{{ $labels.asa_code }}`, `{{ $labels.routerboard }}`, `{{ $labels.msg }}` (per-event rules only), and `{{ $values.A.Value }}` (the actual count — **not** `$values.B` which is the threshold-pass result `0`/`1`). Each description includes a copy-paste LogQL line for Grafana → Explore.
 
 **Why the `cisco-asa-acl-deny-spike` matches `710003` and the 106 family**: ASA emits `%ASA-3-710003` (control-plane access denied) by default. The often-cited `%ASA-4-106023` only fires if the ACL entry has the `log` keyword — most ASAs don't have it set, so a rule matching only 106023 will see no data.
 
@@ -321,6 +327,7 @@ logging host management 10.10.10.119 udp/514
 10. **ASA ACLs don't log denies by default.** `%ASA-4-106023` only fires when an ACL entry has the `log` keyword. The default ASA emits `%ASA-3-710003` (control-plane access denied) instead. Match both: `%ASA-[0-7]-(106\|710003)`.
 11. **`noDataState: NoData` on a Loki rule = synthetic alert spam.** When the query returns no data, Grafana fires a `DatasourceNoData` alert with empty labels (`summary = … on [no value]`). Set `noDataState: OK` unless missing data is itself an alert condition.
 12. **Use `$values.A.Value` in alert annotations, not `$values.B`.** `$values.B` is the threshold-pass result (`0` or `1`), not the count. Easy to confuse — the message reads "1 ACL denies in 5m" no matter the actual number.
+13. **Per-event vs. volume rules need different grouping.** Per-event rules (critical, threat detection, link state) extract `msg` via `regexp` and group by `(routerboard, asa_code, msg)` so the alert summary contains the actual log line — `%ASA-418018 on ASA-1: neighbor 192.1.20.2 Down BGP Notification sent`. Volume rules (deny spike, auth brute-force) must NOT include `msg` in the grouping or the count splits per (src, dst, user) tuple and never reaches the spike threshold. When adding a new rule, decide first: "do I want one alert per event or one alert when count exceeds N?"
 
 ## 16. Verification checklist
 
@@ -371,6 +378,8 @@ curl -s -u "admin:grafana123" 'http://localhost:3000/api/v1/provisioning/alert-r
 | ASA ACL denies stat = 0 even though there are denies | Default ASA emits `%ASA-3-710003`, not `%ASA-4-106023`. Use `\|~ "%ASA-[0-7]-(106\|710003)"` — §15.10 |
 | Alert text shows `summary = ... on [no value]` | `noDataState=NoData` synthetic alert; set to `OK` — §15.11 |
 | Alert description always says "1 ... in 5m" regardless of actual count | Annotation uses `$values.B` (threshold result 0/1) instead of `$values.A.Value` — §15.12 |
+| Alert summary shows code but not the actual message body | Per-event rule isn't extracting `msg` — add `\| regexp \`...:\s*(?P<msg>.*)\`` and include `msg` in the `sum by (...)` grouping. See §10/§15.13 |
+| New volume-detection rule never fires despite obvious spikes | Probably grouping by `msg` — splits the count across every src/dst tuple. Group by `(routerboard, asa_code)` only for spike rules — §15.13 |
 | Pod logs show `field lookups not found in type config.plain` | snmp.yml uses old (module-level) `lookups` syntax — must be per-metric (§6) |
 | Helm upgrade fails with `undefined variable "$labels"` | Missing `tpl` escape on Grafana templates — see §10 |
 
