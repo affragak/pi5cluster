@@ -299,6 +299,8 @@ data:
                 oid: 1.3.6.1.4.1.9.9.48.1.1.1.2
 
       # Cisco ASA — adds firewall connection count
+      # Memory comes from CISCO-ENHANCED-MEMPOOL-MIB (1.3.6.1.4.1.9.9.221) on ASA,
+      # not the legacy CISCO-MEMORY-POOL-MIB (1.3.6.1.4.1.9.9.48) which ASA does not expose.
       cisco_asa:
         walk:
           - 1.3.6.1.2.1.1.3
@@ -306,7 +308,7 @@ data:
           - 1.3.6.1.2.1.2.2.1
           - 1.3.6.1.2.1.31.1.1.1
           - 1.3.6.1.4.1.9.9.109.1.1.1.1.7
-          - 1.3.6.1.4.1.9.9.48.1.1.1
+          - 1.3.6.1.4.1.9.9.221.1.1.1.1
           - 1.3.6.1.4.1.9.9.147.1.2.2.2.1.5
         metrics:
           - name: sysUpTime
@@ -401,29 +403,33 @@ data:
               - labelname: cpmCPUTotalIndex
                 type: gauge
           - name: ciscoMemoryPoolUsed
-            oid: 1.3.6.1.4.1.9.9.48.1.1.1.5
+            oid: 1.3.6.1.4.1.9.9.221.1.1.1.1.18
             type: gauge
-            help: Memory pool used
+            help: ASA memory pool bytes used (cempMemPoolHCUsed, CISCO-ENHANCED-MEMPOOL-MIB)
             indexes:
-              - labelname: ciscoMemoryPoolType
+              - labelname: cempMemPoolEntityIndex
+                type: gauge
+              - labelname: cempMemPoolIndex
                 type: gauge
             lookups:
-              - labels: [ciscoMemoryPoolType]
+              - labels: [cempMemPoolEntityIndex, cempMemPoolIndex]
                 labelname: ciscoMemoryPoolName
                 type: DisplayString
-                oid: 1.3.6.1.4.1.9.9.48.1.1.1.2
+                oid: 1.3.6.1.4.1.9.9.221.1.1.1.1.3
           - name: ciscoMemoryPoolFree
-            oid: 1.3.6.1.4.1.9.9.48.1.1.1.6
+            oid: 1.3.6.1.4.1.9.9.221.1.1.1.1.20
             type: gauge
-            help: Memory pool free
+            help: ASA memory pool bytes free (cempMemPoolHCFree, CISCO-ENHANCED-MEMPOOL-MIB)
             indexes:
-              - labelname: ciscoMemoryPoolType
+              - labelname: cempMemPoolEntityIndex
+                type: gauge
+              - labelname: cempMemPoolIndex
                 type: gauge
             lookups:
-              - labels: [ciscoMemoryPoolType]
+              - labels: [cempMemPoolEntityIndex, cempMemPoolIndex]
                 labelname: ciscoMemoryPoolName
                 type: DisplayString
-                oid: 1.3.6.1.4.1.9.9.48.1.1.1.2
+                oid: 1.3.6.1.4.1.9.9.221.1.1.1.1.3
           - name: cfwConnectionStatValue
             oid: 1.3.6.1.4.1.9.9.147.1.2.2.2.1.5
             type: gauge
